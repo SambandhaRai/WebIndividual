@@ -301,7 +301,7 @@ export const RoomImage = styled.img`
 
 export const RoomInfo = styled.div`
   padding: 2vh;
-  height: 32vh;
+  height: 31.5vh;
 
   h2 {
     font-family: "Times New Roman", Times, serif; 
@@ -355,7 +355,7 @@ export const IconText = styled.div`
 export const LearnMoreBtn = styled.button`
   padding: 2vh;
   width: 90%;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   background-color: white;
   color: #B77729;
   border: 2px solid #B77729;
