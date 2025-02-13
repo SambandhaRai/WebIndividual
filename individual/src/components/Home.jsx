@@ -69,7 +69,7 @@ function NavBar() {
                                 <MenuIcon size={24} color="white" /> // Render MenuIcon when not clicked
                             )}
                             <MenuIconDropdown dropdown={click}>
-                                <DropdownItem><Link to="/rooms/login">Login</Link></DropdownItem>
+                                <DropdownItem><Link to="/login">Login</Link></DropdownItem>
                                 <DropdownItem><Link to="/rooms/signin">Sign In</Link></DropdownItem>
                             </MenuIconDropdown>
                         </NavItem>
