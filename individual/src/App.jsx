@@ -7,7 +7,7 @@ import './App.css';
 
 const Home = React.lazy(() => import("./components/Home"));
 
-const Login = React.lazy(() => import("./components/login1"));
+const Login = React.lazy(() => import("./components/Login"));
 
 function App() {
 

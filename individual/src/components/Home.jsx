@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Bed, MenuIcon, ShowerHead, UsersIcon, X } from "lucide-react";
+import { Bed, ShowerHead, UsersIcon } from "lucide-react";
 import {
     Container,
     NavContainer, 
@@ -9,6 +9,8 @@ import {
     NavItem,
     DropdownMenu,
     DropdownItem,
+    StyledMenuIcon,
+    StyledXIcon,
     MenuIconDropdown,
     AboutContainer,
     AboutBtn,
@@ -55,7 +57,7 @@ function NavBar() {
                         <NavItem><Link to="/">HOME</Link></NavItem>
                         <NavItem onMouseEnter={toggleDropdown} onMouseLeave={toggleDropdown}>
                             <Link to="/rooms">ROOMS & SUITES</Link>
-                            <DropdownMenu dropdown={dropdown}>
+                            <DropdownMenu $dropdown={dropdown}>
                             <DropdownItem><Link to="/rooms/cottage">Cottage Room</Link></DropdownItem>
                             <DropdownItem><Link to="/rooms/premium">Premium Room</Link></DropdownItem>
                             <DropdownItem><Link to="/rooms/club">Club Room</Link></DropdownItem>
@@ -64,11 +66,11 @@ function NavBar() {
                         <NavItem><Link to="/about">ABOUT</Link></NavItem>
                         <NavItem><Link to="/reviews">REVIEWS</Link></NavItem>
                         <NavItem onClick={handleClick} onAbort={handleClick}>{click ? (
-                                <X size={24} color="white" />  // Render X (cross) when clicked
+                                <StyledXIcon size={24} />  // Render X (cross) when clicked
                             ) : (
-                                <MenuIcon size={24} color="white" /> // Render MenuIcon when not clicked
+                                <StyledMenuIcon size={24} />// Render MenuIcon when not clicked
                             )}
-                            <MenuIconDropdown dropdown={click}>
+                            <MenuIconDropdown $dropdown={click}>
                                 <DropdownItem><Link to="/login">Login</Link></DropdownItem>
                                 <DropdownItem><Link to="/rooms/signin">Sign In</Link></DropdownItem>
                             </MenuIconDropdown>

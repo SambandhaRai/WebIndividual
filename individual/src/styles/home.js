@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { X, MenuIcon } from "lucide-react";
 
 export const Container = styled.div`
   display: flex;
@@ -83,8 +84,26 @@ export const DropdownMenu = styled.div`
   left: 0;
   padding: 10px 0;
   z-index: 1; // Ensure it's above other elements
-  display: ${props => (props.dropdown ? 'flex' : 'none')}; /* Show only when dropdown state is true */
+  display: ${(props) => (props.$dropdown ? "block" : "none")};
   flex-direction: column;
+`;
+
+export const StyledMenuIcon = styled(MenuIcon)`
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
+  
+  &:hover {
+    transform: scale(1.2);
+  }
+`;
+
+export const StyledXIcon = styled(X)`
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
+  
+  &:hover {
+    transform: scale(1.2);
+  }
 `;
 
 export const MenuIconDropdown = styled.div`
@@ -98,7 +117,7 @@ export const MenuIconDropdown = styled.div`
   left: 0; /* Align it to the left of the parent container */
   padding: 10px 0;
   z-index: 1;
-  display: ${props => (props.dropdown ? 'flex' : 'none')};
+  display: ${(props) => (props.$dropdown ? "block" : "none")};
   flex-direction: column;
 `;
 
