@@ -9,7 +9,10 @@ const Home = React.lazy(() => import("./components/Home"));
 
 const Login = React.lazy(() => import("./components/Login"));
 
-const Signup = React.lazy(() => import("./components/SignUp"))
+const Signup = React.lazy(() => import("./components/SignUp"));
+
+const Rooms = React.lazy(() => import("./components/Rooms"));
+
 
 function App() {
 
@@ -21,6 +24,7 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/rooms" element={<Rooms />} />
         </Routes>
       </Suspense>
     </Router>

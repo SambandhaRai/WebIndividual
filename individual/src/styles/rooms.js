@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { X, MenuIcon } from "lucide-react";
+import rooms from "/Users/sambandharai/Desktop/WebIndividual/individual/src/assets/rooms.png";
+
 
 export const Container = styled.div`
   display: flex;
@@ -97,7 +99,7 @@ export const StyledMenuIcon = styled(MenuIcon)`
   }
 `;
 
-export const StyledXIcon = styled(MenuIcon)`
+export const StyledXIcon = styled(X)`
   cursor: pointer;
   transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
   
@@ -147,34 +149,56 @@ export const Content = styled.div`
 
 // About Space
 export const AboutContainer = styled.div`
+  background-image: url(${rooms}), linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7));
+  background-size: cover;
+  background-position: center;
   text-align: center;
   padding-top: 10vh;
   padding-bottom: 10vh;
   width: 100%;
-  height: auto;
+  height: 65vh;
   background-color: #EEDDB8;
-  
+
   h1 {
     font-size: 60px;
     font-family: "Times New Roman", Times, serif;
-    color: #B77729;
-    margin-bottom: 0vh;
+    color: #D5C2A5;
+    margin-top: 20vh;
+    margin-bottom: 2vh;
   }
 
-  h1:nth-of-type(2) {
-    color: black; 
-    margin-top: 0;
-    margin-bottom: 5vh;
+  h1 span {
+    text-decoration: underline;
+    text-decoration-color: #D5C2A5; /* Adjust the color of the underline */
+    text-decoration-thickness: 3px; /* Adjust thickness if needed */
+    text-underline-offset: 8px;
   }
 
   p {
-    margin-top: 8px;
+    font-family: 'Noto Serif', serif;
+    padding-left: 50vh;
+    padding-right: 50vh;
+    margin-top: 15px;
     font-size: 1rem;
-    color: #444;
+    font-weight: 600;
+    color: #FFB81C;
     line-height: 1.6;
     max-width: 900px;
     margin: 0 auto;
   }
+
+  /* hr {
+    border: none;
+    height: 3px;
+    background-color: #D5C2A5;
+    margin: 10px 0;
+    width: 38%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 2vh;
+  }
+  */
+
 `;
 
 export const AboutBtn = styled.button`
@@ -303,7 +327,7 @@ export const RoomCard = styled.div`
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   width: 58vh;
-  margin-bottom: 3vh;
+  margin-bottom: 10vh;
   text-align: center;
   transition: transform 0.3s ease-in-out;
 
@@ -415,34 +439,6 @@ export const BookNowBtn = styled.button`
     background-color: black;
     color: #FEDD00;
     border-color: black;
-  }
-
-  &:focus {
-    outline: none;
-  }
-`;
-
-export const ViewAllBtn = styled.button`
-  padding: 2vh;
-  height: 7vh;
-  width: 20vh;
-  margin-top: 15vh;
-  margin-bottom: 15vh;
-  background-color: #F4E8D7;
-  color: #B77729;
-  border: 1px solid #B77729;
-  padding: 10px 20px;
-  font-family: "Times New Roman", Times, serif;
-  font-weight: bold;
-  font-size: 1rem;
-  border-radius: 0px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background-color: white;
-    color: #B77729;
-    border: 1px solid #B77729;
   }
 
   &:focus {

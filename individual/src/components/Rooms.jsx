@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Bed, ShowerHead, UsersIcon } from "lucide-react";
 import {
     Container,
@@ -13,11 +13,6 @@ import {
     StyledXIcon,
     MenuIconDropdown,
     AboutContainer,
-    AboutBtn,
-    ImageContainer,
-    Images,
-    Image,
-    ImageWrapper,
     Content,
     RoomContainer,
     RoomText,
@@ -30,13 +25,8 @@ import {
     IconText,
     LearnMoreBtn,
     BookNowBtn,
-    ViewAllBtn,
     BookNowBtn2
-} from "../styles/home";
-import deer from "../assets/deer.jpeg";
-import golf from "../assets/glf.jpeg";
-import swim from "../assets/swim.jpeg";
-import wed from "../assets/wed.jpeg";
+} from "../styles/rooms";
 import ctg from "../assets/ctgRoom.png";
 import prem from "../assets/premRoom.png";
 import club from "../assets/clubRoom.jpeg";
@@ -44,14 +34,9 @@ import club from "../assets/clubRoom.jpeg";
 function NavBar() {
     const [click, setClick] = useState(false);
     const [dropdown, setDropdown] = useState(false);
-    const navigate = useNavigate();  
 
     const handleClick = () => setClick(!click);
     const toggleDropdown = () => setDropdown(prev => !prev);
-
-    const roomsClick = () => {
-        navigate("/rooms");  // Navigate to /rooms when the button is clicked
-    };
 
     return (
         <Container>
@@ -59,13 +44,13 @@ function NavBar() {
             <NavContainer>
                 <Nav>
                     <NavList>
-                        <NavItem><Link to="/home"
-                        onClick={(e) => {
-                            e.preventDefault(); // Prevent navigation
-                            window.location.reload(); // Reload page
-                        }}>HOME</Link></NavItem>
+                        <NavItem><Link to="/home">HOME</Link></NavItem>
                         <NavItem onMouseEnter={toggleDropdown} onMouseLeave={toggleDropdown}>
-                            <Link to="/rooms">ROOMS & SUITES</Link>
+                            <Link to="/rooms"
+                            onClick={(e) => {
+                                e.preventDefault(); // Prevent navigation
+                                window.location.reload(); // Reload page
+                            }}>ROOMS & SUITES</Link>
                             <DropdownMenu $dropdown={dropdown}>
                             <DropdownItem><Link to="/rooms/cottage">Cottage Room</Link></DropdownItem>
                             <DropdownItem><Link to="/rooms/premium">Premium Room</Link></DropdownItem>
@@ -89,23 +74,17 @@ function NavBar() {
             </NavContainer>
             <Content>
                 <AboutContainer>
-                    <h1>LUXURY ADMIST</h1>
-                    <h1>NATURE'S EMBRACE</h1>
-                    <p>Leave the noise behind and step into a world of untouched beauty. 
-                        Nestled within a secluded sanctuary, our resort offers a rare blend of heritage and wilderness. 
-                        Once a retreat for royalty, this haven invites you to wander beneath towering trees, where the whispers of history meet the soothing sounds of nature.</p>
-                    <p>Wake up to the sight of misty hills, spot wildlife in their natural habitat, and let the crisp mountain air rejuvenate your spirit. 
-                        Whether you seek adventure, relaxation, or a touch of indulgence, every moment here is a celebration of tranquility and luxury. Your escape begins now.</p>
-                    <AboutBtn>About Us</AboutBtn>
+                    <h1>
+                        <span>ROOMS</span>
+                        &nbsp;
+                        <span>&</span>
+                        &nbsp;
+                        <span>SUITES</span>
+                    </h1>
+                    {/* <hr /> */}
+                    <p>Indulge in luxury with our beautifully designed rooms and suites, offering the perfect blend of comfort and elegance for every guest</p>
+                    <BookNowBtn2>Book Now</BookNowBtn2>
                 </AboutContainer>
-                <ImageContainer>
-                    <Images>
-                        <ImageWrapper><Image src={golf} alt="Golf" /></ImageWrapper>
-                        <ImageWrapper><Image src={deer} alt="Deer" /></ImageWrapper>
-                        <ImageWrapper><Image src={swim} alt="Swim" /></ImageWrapper>
-                        <ImageWrapper><Image src={wed} alt="Wed" /></ImageWrapper>
-                    </Images>
-                </ImageContainer>
                 <RoomContainer>
                     <RoomText>
                         <h1>CHOOSE YOUR PERFECT STAY</h1>
@@ -196,7 +175,6 @@ function NavBar() {
                             <BookNowBtn>Book Now</BookNowBtn>
                         </RoomCard>
                     </Rooms>
-                    <ViewAllBtn onClick={roomsClick}>View All</ViewAllBtn>
                 </RoomContainer>
             </Content>
         </Container>
