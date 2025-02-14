@@ -44,8 +44,8 @@ const Login = () => {
             // Check if access_token exists inside response.data
             if (response.data && response.data.data.access_token) {
               console.log("Access Token:", response.data.data.access_token);
-              localStorage.setItem("token", response.data.data.access_token); // ✅ Store Token
-              navigate("/dashboard"); // ✅ Redirect to Dashboard
+              localStorage.setItem("token", response.data.data.access_token); // Store Token
+              navigate("/home"); // Redirect to Dashboard
             } else {
               alert("Login failed! Check credentials.");
             }

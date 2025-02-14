@@ -54,7 +54,11 @@ function NavBar() {
             <NavContainer>
                 <Nav>
                     <NavList>
-                        <NavItem><Link to="/">HOME</Link></NavItem>
+                        <NavItem><Link to="/home"
+                        onClick={(e) => {
+                            e.preventDefault(); // Prevent navigation
+                            window.location.reload(); // Reload page
+                        }}>HOME</Link></NavItem>
                         <NavItem onMouseEnter={toggleDropdown} onMouseLeave={toggleDropdown}>
                             <Link to="/rooms">ROOMS & SUITES</Link>
                             <DropdownMenu $dropdown={dropdown}>
@@ -72,7 +76,7 @@ function NavBar() {
                             )}
                             <MenuIconDropdown $dropdown={click}>
                                 <DropdownItem><Link to="/login">Login</Link></DropdownItem>
-                                <DropdownItem><Link to="/rooms/signin">Sign In</Link></DropdownItem>
+                                <DropdownItem><Link to="/signup">Sign Up</Link></DropdownItem>
                             </MenuIconDropdown>
                         </NavItem>
                     </NavList>
