@@ -16,6 +16,7 @@ export const NavContainer = styled.div`
   width: 100vw;
   height: 13vh;
   background-color: #D9A24A;
+  /* Remove position: fixed */
 `;
 
 export const Nav = styled.nav`
@@ -72,11 +73,13 @@ export const IconText = styled.div`
 // Content Space
 export const Content = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   width: 100vw;
-  height: 85vh; 
-  overflow-y: auto; // scroll
+  height: calc(100vh - 13vh);
+  padding-top: 5vh;
+  overflow-y: auto;
 `;
 
 // Form Container
@@ -86,11 +89,12 @@ export const FormContainer = styled.div`
   padding-right: 8vh;
   padding-bottom: 8vh;
   padding-top: 5vh;
+  margin-bottom: 8vh;
   border-radius: 8px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
   width: 350px;
-  height: 60vh;
+  height: auto;
 `;
 
 export const Title = styled.h1`
@@ -232,7 +236,11 @@ export const Button = styled.button`
   transition: background 0.3s ease;
 
   &:hover {
-  color: #FEDD00;
-  background-color: black;
+    color: #FEDD00;
+    background-color: black;
+  }
+
+  &:focus{
+    outline:none;
   }
 `;

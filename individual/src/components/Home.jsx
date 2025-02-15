@@ -41,7 +41,7 @@ import ctg from "../assets/ctgRoom.png";
 import prem from "../assets/premRoom.png";
 import club from "../assets/clubRoom.jpeg";
 
-function NavBar() {
+function Home() {
     const [click, setClick] = useState(false);
     const [dropdown, setDropdown] = useState(false);
     const navigate = useNavigate();  
@@ -203,4 +203,4 @@ function NavBar() {
     );
 }
 
-export default NavBar;
+export default Home;

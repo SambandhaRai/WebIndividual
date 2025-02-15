@@ -97,7 +97,7 @@ export const StyledMenuIcon = styled(MenuIcon)`
   }
 `;
 
-export const StyledXIcon = styled(MenuIcon)`
+export const StyledXIcon = styled(X)`
   cursor: pointer;
   transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
   

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect }  from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Home } from "lucide-react";
@@ -25,9 +25,22 @@ import {
     FormGroup
 } from "../styles/signup";
 
-const Login = () => {
-    const { register, handleSubmit, reset } = useForm();
+const SignUp = () => {
+    const { register, handleSubmit, reset, setError, watch, getValues, formState: { errors } } = useForm();
     const navigate = useNavigate();
+
+    const password = watch("password");
+    const confirmPassword = watch("confirmPassword");
+
+    useEffect(() => {
+        // Check if password and confirm password match
+        if (password !== confirmPassword) {
+            setError("confirmPassword", {
+                type: "manual",
+                message: "Passwords do not match",
+            });
+        }
+    }, [password, confirmPassword, setError]);
 
     const onSubmit = (data) => {
         console.log("Signing up with:", data);
@@ -103,12 +116,21 @@ const Login = () => {
                         {/* Email */}
                         <label htmlFor="email">Email</label>
                         <Input
-                            {...register("email")}
                             type="email"
+                            {...register("email", {
+                              required: "Email is required",
+                              pattern: {
+                                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                                message: "Invalid email address",
+                              },
+                            })}
                             id="email"
                             placeholder="Enter Email"
                             required
-                        />
+                          />
+                          {errors.email && (
+                            <p style={{ color: "red" }}>{errors.email.message}</p>
+                          )}
                     </FormGroup>
                         {/* Gender Radio Button */}
                         <RadioGroup>
@@ -142,6 +164,27 @@ const Login = () => {
                             </RadioLabel>
                         </RadioGroup>
                         <FormGroup>
+                        <label htmlFor="contact">Contact No.</label>
+                            <Input
+                                type="tel"
+                                {...register("contact", {
+                                    required: "Contact number is required",
+                                    pattern: {
+                                        value: /^[9][0-9]{9}$/, // Starts with 9 and has exactly 10 digits
+                                        message: "Contact number must be exactly 10 digits and start with 9",
+                                    },
+                                    maxLength: 10, // Maximum length of the number
+                                })}
+                                id="contact"
+                                placeholder="9XXXXXXXXX"
+                                maxLength={10} // Limit to 10 digits
+                                required
+                            />
+                            {errors.contact && (
+                                <p style={{ color: "red", fontSize: "12px" }}>{errors.contact.message}</p>
+                            )}
+                        </FormGroup>
+                        <FormGroup>
                             <label htmlFor="password">Password</label>
                             <Input
                                 {...register("password")}
@@ -151,6 +194,22 @@ const Login = () => {
                                 required
                             />
                         </FormGroup>
+                        <FormGroup>
+                            <label htmlFor="confirmPassword">Confirm Password</label>
+                            <Input
+                                {...register("confirmPassword", {
+                                    required: "Confirm Password is required",
+                                    validate: (value) =>
+                                        value === password || "Passwords do not match", // Custom validation
+                                })}
+                                type="password"
+                                id="confirmPassword"
+                                placeholder="Re-write Password"
+                            />
+                            {errors.confirmPassword && (
+                                <p style={{ color: "red" , fontSize: "12px" }}>{errors.confirmPassword.message}</p>
+                            )}
+                        </FormGroup>
                         <Button type="submit">Sign Up</Button>
                     </Form>
                 </FormContainer>
@@ -159,4 +218,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default SignUp;
