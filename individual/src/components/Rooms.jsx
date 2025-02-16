@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Bed, ShowerHead, UsersIcon } from "lucide-react";
+import { Bed, Expand, ExpandIcon, ShowerHead, UsersIcon } from "lucide-react";
 import {
     Container,
     NavContainer, 
@@ -30,6 +30,8 @@ import {
 import ctg from "../assets/ctgRoom.png";
 import prem from "../assets/premRoom.png";
 import club from "../assets/clubRoom.jpeg";
+import premS from "../assets/prem.jpeg";
+import lux from "../assets/lux.png";
 
 function Room() {
     const [click, setClick] = useState(false);
@@ -57,7 +59,7 @@ function Room() {
                             <DropdownItem><Link to="/rooms/club">Club Room</Link></DropdownItem>
                             </DropdownMenu>
                         </NavItem>
-                        <NavItem><Link to="/about">ABOUT</Link></NavItem>
+                        <NavItem><Link to="/experiences">EXPERIENCES</Link></NavItem>
                         <NavItem><Link to="/reviews">REVIEWS</Link></NavItem>
                         <NavItem onClick={handleClick} onAbort={handleClick}>{click ? (
                                 <StyledXIcon size={24} />  // Render X (cross) when clicked
@@ -87,7 +89,10 @@ function Room() {
                 </AboutContainer>
                 <RoomContainer>
                     <RoomText>
-                        <h1>CHOOSE YOUR PERFECT STAY</h1>
+                        <h1>
+                            <span style={{ color: "black" }}>CHOOSE YOUR</span>
+                            <span> PERFECT STAY</span>
+                        </h1>
                         <p>Choose your perfect stay in our elegantly appointed rooms, where luxury meets comfort. Each room offers a serene retreat with stunning views, ensuring a memorable and restful experience.</p>
                     </RoomText>
                     <Rooms>
@@ -159,6 +164,70 @@ function Room() {
                                             <IconText>
                                                 <Bed size={20} color="#B77729" />
                                                 <span> Double/Twin Beds</span>
+                                            </IconText>
+                                            <IconText>
+                                                <ShowerHead size={20} color="#B77729" />
+                                                <span> 1 Bathroom</span>
+                                            </IconText>
+                                            <IconText>
+                                                <UsersIcon size={20} color="#B77729" />
+                                                <span> 2 Adults + 1 Child</span>
+                                            </IconText>
+                                        </Icons>
+                                    <hr />
+                            </RoomInfo>
+                            <LearnMoreBtn>Learn More</LearnMoreBtn>
+                            <BookNowBtn>Book Now</BookNowBtn>
+                        </RoomCard>
+
+                        <RoomCard>
+                            <RoomImage src={premS} alt="Premier Suite" />
+                            <RoomInfo>
+                                <h2>Premier Suite</h2>
+                                <RoomInfoText>
+                                    <p>Combining new decor with a classic style, our premier suite offers patrons with utmost luxury accommodation.</p>
+                                </RoomInfoText>
+                                    <hr />
+                                        <Icons>
+                                            <IconText>
+                                                <Bed size={20} color="#B77729" />
+                                                <span> Double Beds</span>
+                                            </IconText>
+                                            <IconText>
+                                                <ExpandIcon size={20} color="#B77729" />
+                                                <span> 42 m²</span>
+                                            </IconText>
+                                            <IconText>
+                                                <ShowerHead size={20} color="#B77729" />
+                                                <span> 1 Bathroom</span>
+                                            </IconText>
+                                            <IconText>
+                                                <UsersIcon size={20} color="#B77729" />
+                                                <span> 2 Adults + 1 Child</span>
+                                            </IconText>
+                                        </Icons>
+                                    <hr />
+                            </RoomInfo>
+                            <LearnMoreBtn>Learn More</LearnMoreBtn>
+                            <BookNowBtn>Book Now</BookNowBtn>
+                        </RoomCard>
+
+                        <RoomCard>
+                            <RoomImage src={lux} alt="Deluxe Suite" />
+                            <RoomInfo>
+                                <h2>Deluxe Suite</h2>
+                                <RoomInfoText>
+                                    <p>Set in a duplex suite with an attic, the Deluxe Suite derives inspiration from classical nepali architecture</p>
+                                </RoomInfoText>
+                                    <hr />
+                                        <Icons>
+                                            <IconText>
+                                                <Bed size={20} color="#B77729" />
+                                                <span> Double Beds</span>
+                                            </IconText>
+                                            <IconText>
+                                                <ExpandIcon size={20} color="#B77729" />
+                                                <span> 92 m²</span>
                                             </IconText>
                                             <IconText>
                                                 <ShowerHead size={20} color="#B77729" />

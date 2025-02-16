@@ -192,6 +192,7 @@ const SignUp = () => {
                                 id="password"
                                 placeholder="Enter Password"
                                 required
+                                minLength={6}
                             />
                         </FormGroup>
                         <FormGroup>

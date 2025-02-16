@@ -72,7 +72,7 @@ function Home() {
                             <DropdownItem><Link to="/rooms/club">Club Room</Link></DropdownItem>
                             </DropdownMenu>
                         </NavItem>
-                        <NavItem><Link to="/about">ABOUT</Link></NavItem>
+                        <NavItem><Link to="/experiences">EXPERIENCES</Link></NavItem>
                         <NavItem><Link to="/reviews">REVIEWS</Link></NavItem>
                         <NavItem onClick={handleClick} onAbort={handleClick}>{click ? (
                                 <StyledXIcon size={24} />  // Render X (cross) when clicked

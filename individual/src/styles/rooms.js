@@ -382,7 +382,9 @@ export const Icons = styled.div`
   display: flex;
   justify-content: left;
   margin-left: 5vh;
-  gap: 20px;
+  margin-right: 5vh;
+  gap: 50px;
+  row-gap: 20px;
   flex-wrap: wrap;
 `;
 
