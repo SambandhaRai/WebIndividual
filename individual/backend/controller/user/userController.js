@@ -1,115 +1,116 @@
 import { User } from "../../model/index.js";
 
 /**
- *  fetch all users
+ * Fetch all users
  */
 const getAll = async (req, res) => {
   try {
-    //fetching all the data from users table
     const users = await User.findAll();
-    res.status(200).send({ data: users, message: "successfully fetched data" });
+    res.status(200).send({ data: users, message: "Successfully fetched data" });
   } catch (e) {
     res.status(500).json({ error: "Failed to fetch users" });
   }
 };
 
 /**
- *  create new user
+ * Create a new user
  */
-
 const create = async (req, res) => {
-    try {
-      const body = req.body;
-  
-      // Check if the required fields are provided
-      if (!body?.username || !body?.email || !body?.password) {
-        return res.status(400).send({ message: "Invalid payload" });
-      }
-  
-      // Create the user in the database
-      const user = await User.create({
-        email: body.email,
-        username: body.username,
-        password: body.password,  // Ideally, hash the password before saving
-      });
-  
-      // Respond with the created user data
-      res.status(201).send({ data: user, message: "Successfully created user" });
-    } catch (e) {
-      console.log(e);
-      res.status(500).json({ error: "Failed to create user" });
-    }
-  };
-  
-/**
- *  update existing user
- */
-
-const update = async (req, res) => {
   try {
-    const { id = null } = req.params;
     const body = req.body;
-    console.log(req.params);
-    //checking if user exist or not
-    const oldUser = await User.findOne({ where: { id } });
-    if (!oldUser) {
-      return res.status(500).send({ message: "User not found" });
+
+    // Check if all required fields are provided
+    if (!body?.name || !body?.email || !body?.gender || !body?.contact || !body?.password) {
+      return res.status(400).send({ message: "Invalid payload" });
     }
-  
-    
-    oldUser.email = body.email;
-    oldUser.username = body.username;
-    oldUser.password = body.password || oldUser.password;
-    oldUser.save();
-    res
-      .status(201)
-      .send({ data: oldUser, message: "user updated successfully" });
+
+    // Create user in the database
+    const user = await User.create({
+      name: body.name,
+      email: body.email,
+      gender: body.gender,
+      contact: body.contact,
+      password: body.password,
+    });
+
+    res.status(201).send({ data: user, message: "Successfully created user" });
   } catch (e) {
     console.log(e);
-    res.status(500).json({ error: "Failed to update users" });
+    res.status(500).json({ error: "Failed to create user" });
   }
 };
 
 /**
- *  delete user
+ * Update existing user
  */
-const delelteById = async (req, res) => {
+const update = async (req, res) => {
   try {
-    const { id = null } = req.params;
+    const { id } = req.params;
+    const body = req.body;
+
+    // Check if user exists
+    const oldUser = await User.findOne({ where: { id } });
+    if (!oldUser) {
+      return res.status(404).send({ message: "User not found" });
+    }
+
+    // Update fields
+    oldUser.name = body.name || oldUser.name;
+    oldUser.email = body.email || oldUser.email;
+    oldUser.gender = body.gender || oldUser.gender;
+    oldUser.contact = body.contact || oldUser.contact;
+    oldUser.password = body.password || oldUser.password;
+
+    await oldUser.save();
+
+    res.status(200).send({ data: oldUser, message: "User updated successfully" });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ error: "Failed to update user" });
+  }
+};
+
+/**
+ * Delete user by ID
+ */
+const deleteById = async (req, res) => {
+  try {
+    const { id } = req.params;
     const oldUser = await User.findOne({ where: { id } });
 
-    //checking if user exist or not
     if (!oldUser) {
-      return res.status(500).send({ message: "User not found" });
+      return res.status(404).send({ message: "User not found" });
     }
-    oldUser.destroy();
-    res.status(201).send({ message: "user deleted successfully" });
+
+    await oldUser.destroy();
+    res.status(200).send({ message: "User deleted successfully" });
   } catch (e) {
-    res.status(500).json({ error: "Failed to fetch users" });
+    res.status(500).json({ error: "Failed to delete user" });
   }
 };
 
 /**
- *  fetch user by id
+ * Fetch user by ID
  */
 const getById = async (req, res) => {
   try {
-    const { id = null } = req.params;
+    const { id } = req.params;
     const user = await User.findOne({ where: { id } });
+
     if (!user) {
-      return res.status(500).send({ message: "User not found" });
+      return res.status(404).send({ message: "User not found" });
     }
-    res.status(201).send({ message: "user fetched successfully", data: user });
+
+    res.status(200).send({ message: "User fetched successfully", data: user });
   } catch (e) {
-    res.status(500).json({ error: "Failed to fetch users" });
+    res.status(500).json({ error: "Failed to fetch user" });
   }
 };
-
 
 export const userController = {
   getAll,
   create,
   getById,
-  delelteById,
+  deleteById,
   update,
 };

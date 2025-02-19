@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Home } from "lucide-react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import {
     Container,
     NavContainer,
@@ -24,8 +25,9 @@ import {
     Subtitle,
     FormGroup
 } from "../styles/signup";
+import { registerApi } from "../apis/api.jsx";
 
-const API_BASE_URL = "http://localhost:4999"; // Set this according to your backend
+const API_BASE_URL = "http://localhost:4000"; 
 
 const SignUp = () => {
     const { register, handleSubmit, reset, setError, watch, getValues, formState: { errors } } = useForm();
@@ -44,28 +46,32 @@ const SignUp = () => {
     }, [password, confirmPassword, setError]);
 
     const onSubmit = async (data) => {
-        try {
-            console.log("Sending signup request:", data);
+        console.log("Submitting form with registerApi...", data);
     
-            const response = await axios.post(`${API_BASE_URL}/api/auth/signup`, data, {
-                headers: { "Content-Type": "application/json" },
-            });
-    
-            console.log("Signup Response:", response.data);
-    
-            if (response.data?.data?.access_token) {
-                localStorage.setItem("token", response.data.data.access_token);
-                navigate("/home");
-            } else {
-                alert(response.data.message || "Signup failed! Try again.");
-            }
-    
-            reset();
-        } catch (error) {
-            console.error("Error signing up:", error.response?.data || error.message);
-            alert(error.response?.data?.message || "Error signing up. Please try again.");
+        if (!data.name || !data.email || !data.password) {
+            toast.error("All fields are required!");
+            return;
         }
-    };    
+    
+        try {
+            const res = await registerApi(data);
+            console.log("Response from registerApi:", res);
+    
+            if (res.status === 201) {
+                toast.success(res.data.message || "Registration successful!", { className: "toast-success" });
+                console.log("Navigating to login...");
+                setTimeout(() => navigate("/login"), 1000);
+            } else {
+                toast.error(res.data.message || "Registration failed!", { className: "toast-error" });
+            }
+        } catch (err) {
+            console.error("Error:", err);
+            toast.error("Internal server error", { className: "toast-error" });
+        }
+    
+        reset();
+    };
+    
 
     return (
         <Container>

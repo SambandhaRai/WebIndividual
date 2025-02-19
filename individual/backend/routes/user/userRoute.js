@@ -11,6 +11,6 @@ router.use(authenticateToken);
 router.get("/", userController.getAll);
 router.put("/:id", userController.update);
 router.get("/:id", userController.getById);
-router.delete("/:id", userController.delelteById);
+router.delete("/:id", userController.deleteById);
 
 export { router as userRouter };

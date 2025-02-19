@@ -23,6 +23,8 @@ import {
     FooterText,
     LinkText
 } from "../styles/login";
+import { loginApi } from "../apis/api.jsx";
+import { useState } from "react";
 
 const Login = () => {
     const { register, handleSubmit, reset } = useForm();
@@ -30,33 +32,31 @@ const Login = () => {
 
     const onSubmit = (data) => {
         console.log("Logging in with:", data);
-    
-        axios
-          .post(`${API.BASE_URL}/api/auth/login`, data, {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          })
-          .then((response) => {
-            // Log the entire response to inspect the structure
-            console.log("Login Response:", response.data.data.access_token);
-    
-            // Check if access_token exists inside response.data
-            if (response.data && response.data.data.access_token) {
-              console.log("Access Token:", response.data.data.access_token);
-              localStorage.setItem("token", response.data.data.access_token); // Store Token
-              navigate("/home"); // Redirect to Dashboard
+
+        if (!data.email || !data.password) {
+        toast.error("Email and Password are required!");
+        return;
+        }
+
+        loginApi(data)
+        .then((res) => {
+            console.log("Response:", res);
+            if (res.data.success === false) {
+            toast.error(res.data.message);
             } else {
-              alert("Login failed! Check credentials.");
+            toast.success(res.data.message);
+            localStorage.setItem("token", res.data.token);
+            localStorage.setItem("user", JSON.stringify(res.data.userData));
+            navigate("/home");
             }
-          })
-          .catch((error) => {
-            console.error("Error logging in:", error);
-            alert("Error logging in. Please try again.");
-          });
-    
+        })
+        .catch((err) => {
+            console.error("Error logging in:", err);
+            toast.error("Server Error! Please try again later.");
+        });
+
         reset();
-      };
+    };
 
     return (
         <Container>
