@@ -1,13 +1,15 @@
 import { User } from "../../model/index.js";
-
+import bcrypt from "bcryptjs";
+import { body, validationResult } from "express-validator";
 /**
  * Fetch all users
  */
 const getAll = async (req, res) => {
   try {
-    const users = await User.findAll();
-    res.status(200).send({ data: users, message: "Successfully fetched data" });
-  } catch (e) {
+    const users = await User.findAll({ attributes: { exclude: ["password"] } });
+    res.status(200).json({ data: users, message: "Successfully fetched users" });
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ error: "Failed to fetch users" });
   }
 };
@@ -15,84 +17,79 @@ const getAll = async (req, res) => {
 /**
  * Create a new user
  */
+
 const create = async (req, res) => {
+  // Validate request
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   try {
-    const body = req.body;
-
-    // Check if all required fields are provided
-    if (!body?.name || !body?.email || !body?.gender || !body?.contact || !body?.password) {
-      return res.status(400).send({ message: "Invalid payload" });
+    const { name, email, gender, contact, password } = req.body;
+    console.log("Received data:", req.body);  // Add this log to inspect the data coming in
+  
+    // Check if email is already in use
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(400).json({ message: "Email already in use" });
     }
-
-    // Create user in the database
+  
+    const existingContact = await User.findOne({ where: { contact } });
+    if (existingContact) {
+      return res.status(400).json({ message: "Contact already in use" });
+    }
+  
+    const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({
-      name: body.name,
-      email: body.email,
-      gender: body.gender,
-      contact: body.contact,
-      password: body.password,
+      name: req.body.name,
+      email: req.body.email,
+      gender: req.body.gender,
+      contact: req.body.contact,
+      password: hashedPassword,
     });
-
+  
     res.status(201).send({ data: user, message: "Successfully created user" });
   } catch (e) {
-    console.log(e);
-    res.status(500).json({ error: "Failed to create user" });
-  }
+    console.log("Error creating user:", e);  // Add more specific error logging
+    res.status(500).json({ error: "Failed to create user", details: e.message });
+  }  
 };
 
 /**
- * Update existing user
+ * Update user details
  */
 const update = async (req, res) => {
   try {
     const { id } = req.params;
-    const body = req.body;
+    const { name, email, gender, contact, password } = req.body;
 
-    // Check if user exists
-    const oldUser = await User.findOne({ where: { id } });
-    if (!oldUser) {
+    const user = await User.findOne({ where: { id } });
+    if (!user) {
       return res.status(404).send({ message: "User not found" });
     }
 
-    // Update fields
-    oldUser.name = body.name || oldUser.name;
-    oldUser.email = body.email || oldUser.email;
-    oldUser.gender = body.gender || oldUser.gender;
-    oldUser.contact = body.contact || oldUser.contact;
-    oldUser.password = body.password || oldUser.password;
+    if (name) user.name = name;
+    if (email) user.email = email;
+    if (gender) user.gender = gender;
+    if (contact) user.contact = contact;
+    if (password) {
+      user.password = await bcrypt.hash(password, 10);
+    }
 
-    await oldUser.save();
-
-    res.status(200).send({ data: oldUser, message: "User updated successfully" });
+    await user.save();
+    res.status(200).send({ data: user, message: "User updated successfully" });
   } catch (e) {
     console.log(e);
     res.status(500).json({ error: "Failed to update user" });
   }
 };
 
+
 /**
- * Delete user by ID
+ * Delete user
  */
 const deleteById = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const oldUser = await User.findOne({ where: { id } });
-
-    if (!oldUser) {
-      return res.status(404).send({ message: "User not found" });
-    }
-
-    await oldUser.destroy();
-    res.status(200).send({ message: "User deleted successfully" });
-  } catch (e) {
-    res.status(500).json({ error: "Failed to delete user" });
-  }
-};
-
-/**
- * Fetch user by ID
- */
-const getById = async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findOne({ where: { id } });
@@ -101,16 +98,33 @@ const getById = async (req, res) => {
       return res.status(404).send({ message: "User not found" });
     }
 
-    res.status(200).send({ message: "User fetched successfully", data: user });
+    await user.destroy();
+    res.status(200).send({ message: "User deleted successfully" });
   } catch (e) {
+    console.log(e);
+    res.status(500).json({ error: "Failed to delete user" });
+  }
+};
+
+
+/**
+ * Fetch user by ID
+ */
+const getById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findByPk(id, { attributes: { exclude: ["password"] } });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ data: user, message: "User fetched successfully" });
+
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ error: "Failed to fetch user" });
   }
 };
 
-export const userController = {
-  getAll,
-  create,
-  getById,
-  deleteById,
-  update,
-};
+export const userController = { getAll, create, getById, deleteById, update };

@@ -1,29 +1,30 @@
-export function authenticateToken(req, res, next) {
-  console.log("Request Path:", req.path); // Debugging line
+import jwt from "jsonwebtoken";
 
-  const publicRoutes = ["/api/users/create", "/api/auth/login"];
-
-  if (publicRoutes.includes(req.originalUrl)) {
-    return next();
-  }
-
-  if (publicRoutes.includes(req.path)) {
-    
-    console.log("Skipping authentication for:", req.path);
-    return next(); // Skip authentication for public routes
-  }
-
-  const token = req.header("Authorization")?.split(" ")[1];
-
-  if (!token) {
-    return res.status(401).send({ message: "Access denied. No token provided." });
-  }
-
-  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err) {
-      return res.status(403).send("Invalid or expired token.");
+export const authGuard = (req, res, next) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(401).json({ success: false, message: "Authorization header missing!" });
     }
-    req.user = decoded;
-    next();
-  });
-}
+    const token = authHeader.split(" ")[1];
+    if (!token) {
+        return res.status(401).json({ success: false, message: "Token missing!" });
+    }
+
+    try {
+        const decodedData = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = decodedData;
+        next();
+    } catch (error) {
+        return res.status(401).json({ success: false, message: "Invalid token!" });
+    }
+};
+
+
+export const authGuardAdmin = (req, res, next) => {
+    authGuard(req, res, () => {
+        if (!req.user.isAdmin) {
+            return res.status(403).json({ success: false, message: "Permission denied!" });
+        }
+        next();
+    });
+};

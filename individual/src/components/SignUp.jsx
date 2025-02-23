@@ -54,8 +54,9 @@ const SignUp = () => {
         }
     
         try {
+            console.log("📤 Sending Registration Data:", data);
             const res = await registerApi(data);
-            console.log("Response from registerApi:", res);
+            console.log("📥 Backend Response:", res);
     
             if (res.status === 201) {
                 toast.success(res.data.message || "Registration successful!", { className: "toast-success" });
@@ -65,10 +66,10 @@ const SignUp = () => {
                 toast.error(res.data.message || "Registration failed!", { className: "toast-error" });
             }
         } catch (err) {
-            console.error("Error:", err);
-            toast.error("Internal server error", { className: "toast-error" });
+            console.error("❌ Registration error:", err);
+            toast.error(err.response?.data?.message || "Registration failed. Please try again.");
         }
-    
+        
         reset();
     };
     

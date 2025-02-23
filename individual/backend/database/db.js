@@ -10,12 +10,13 @@ export const sequelize = new Sequelize('resort_booking_system_db', 'postgres', '
     logging: false,
 });
 
-export const db = () => {
+export const db = async () => {
   try {
-    sequelize.sync({alter:true})
+    await sequelize.authenticate();
     console.log("database connected successfully")
-
+    await sequelize.sync({ alter: true });
   } catch (e) {
     console.error("fail to connect database successfully",e)
+    process.exit(1);
   }
 }

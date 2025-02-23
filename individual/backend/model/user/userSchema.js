@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../../database/db.js";
 
 
-export const User=sequelize.define("Users",{
+export const User=sequelize.define("users",{
       id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -15,6 +15,10 @@ export const User=sequelize.define("Users",{
       email: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true, // Ensure emails are unique
+        validate: {
+          isEmail: true, // Ensure valid email format
+        },
       },
       gender: {
         type: DataTypes.STRING,
@@ -23,6 +27,7 @@ export const User=sequelize.define("Users",{
       contact: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true, // Ensure contacts are unique
       },
       password:{
         type:DataTypes.STRING

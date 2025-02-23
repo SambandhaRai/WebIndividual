@@ -1,50 +1,68 @@
 import { User } from "../../model/index.js";
 import { generateToken } from "../../security/jwt-utils.js";
+import bcrypt from "bcryptjs";
 
+/**
+ * User Login
+ */
 const login = async (req, res) => {
   try {
-    //fetching all the data from users table
-    if (req.body.email == null) {
-      return res.status(500).send({ message: "email is required" });
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password are required" });
     }
-    if (req.body.password == null) {
-      return res.status(500).send({ message: "email is required" });
-    }
-    const user = await User.findOne({ where: { email: req.body.email } });
+
+    const user = await User.findOne({ where: { email } });
     if (!user) {
-      return res.status(500).send({ message: "user not found" });
+      return res.status(404).json({ message: "User not found" });
     }
-    if (user.password == req.body.password) {
-      const token = generateToken({ user: user.toJSON() });
-      return res.status(200).send({
-        data: { access_token: token },
-        message: "successfully logged in",
-      });
+
+    // Compare hashed password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Incorrect password" });
     }
-  } catch (e) {
-    console.log(e);
+
+    // Generate JWT Token
+    const token = generateToken({ id: user.id, email: user.email });
+
+    console.log("🔑 Token Generated:", token); // Debugging: Check if the token is generated
+
+    return res.status(200).json({
+      access_token: token, // Ensure token is sent properly
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      },
+      message: "Successfully logged in",
+    });
+  } catch (error) {
+    console.error("❌ Login Error:", error);
     res.status(500).json({ error: "Failed to login" });
   }
 };
 
 /**
- *  init
+ * Fetch Current User
  */
-
 const init = async (req, res) => {
   try {
-    const user = req.user.user;
-    delete user.password;
-    res
-      .status(201)
-      .send({ data: user, message: "successfully fetched current  user" });
-  } catch (e) {
-    console.log(e);
-    res.status(500).json({ error: "Failed to fetch users" });
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const { password, ...userData } = req.user; // Exclude password before sending
+
+    return res.status(200).json({ 
+      user: userData, 
+      message: "Successfully fetched current user" 
+    });
+  } catch (error) {
+    console.error("❌ Fetch User Error:", error);
+    res.status(500).json({ error: "Failed to fetch user" });
   }
 };
 
-export const authController = {
-  login,
-  init,
-};
+export const authController = { login, init };

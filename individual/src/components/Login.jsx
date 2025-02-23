@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import {
     Container,
     NavContainer,
@@ -30,33 +31,33 @@ const Login = () => {
     const { register, handleSubmit, reset } = useForm();
     const navigate = useNavigate();
 
-    const onSubmit = (data) => {
-        console.log("Logging in with:", data);
-
+    const onSubmit = async (data) => {
+        console.log("📤 Sending Login Data:", data);
+    
         if (!data.email || !data.password) {
-        toast.error("Email and Password are required!");
-        return;
+            toast.error("Email and Password are required!");
+            return;
         }
-
-        loginApi(data)
-        .then((res) => {
-            console.log("Response:", res);
-            if (res.data.success === false) {
-            toast.error(res.data.message);
+    
+        try {
+            const res = await loginApi(data);
+            console.log("📥 Backend Response:", res.data);
+    
+            if (res && res.access_token) {
+                // Adjusted token storage method
+                localStorage.setItem("token", res.access_token);
+                toast.success(res.message || "Login successful!");
+                navigate("/home");
             } else {
-            toast.success(res.data.message);
-            localStorage.setItem("token", res.data.token);
-            localStorage.setItem("user", JSON.stringify(res.data.userData));
-            navigate("/home");
+                toast.error(res?.message || "Login failed! No token received.");
             }
-        })
-        .catch((err) => {
-            console.error("Error logging in:", err);
-            toast.error("Server Error! Please try again later.");
-        });
-
+        } catch (err) {
+            console.error("❌ Login error:", err);
+            toast.error(err.response?.data?.message || "Invalid credentials or server issue.");
+        }
+    
         reset();
-    };
+    };    
 
     return (
         <Container>
@@ -101,7 +102,7 @@ const Login = () => {
                                 required
                             />
                         </FormGroup>
-                        <Button type="submit">Login</Button>
+                        <Button type="submit" onClick={onSubmit}>Login</Button>
                     </Form>
                     <FooterText>
                         Don't have an account? <LinkText to="/signup">Sign up</LinkText>
