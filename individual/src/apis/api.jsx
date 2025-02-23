@@ -65,6 +65,9 @@ export const logout = () => {
 
 //  Protected User APIs (Require Token) 
 
+
+// ----------------- USER APIs ---------------------
+
 //  Get All Users (Admin or Authenticated Users)
 export const getAllUsers = async () => {
     try {
@@ -98,13 +101,70 @@ export const updateUser = async (id, data) => {
     }
 };
 
-// ✅ Delete User
+// Delete User
 export const deleteUser = async (id) => {
     try {
         const response = await Api.delete(`/users/${id}`, getAuthConfig());
         return response.data;
     } catch (error) {
         console.error("Delete User API Error:", error.response?.data || error.message);
+        throw error.response?.data || error;
+    }
+};
+
+// ----------------- ROOM APIs ---------------------
+
+// Get All Rooms
+export const getAllRooms = async () => {
+    try {
+        const response = await Api.get("/rooms", getAuthConfig());
+        return response.data;
+    } catch (error) {
+        console.error(" Get Rooms API Error:", error.response?.data || error.message);
+        throw error.response?.data || error;
+    }
+};
+
+// Get Room by ID
+export const getRoomById = async (id) => {
+    try {
+        const response = await Api.get(`/rooms/${id}`, getAuthConfig());
+        return response.data;
+    } catch (error) {
+        console.error("Get Room By ID API Error:", error.response?.data || error.message);
+        throw error.response?.data || error;
+    }
+};
+
+// Create Room
+export const createRoom = async (data) => {
+    try {
+        const response = await Api.post("/rooms/create", data, getAuthConfig());
+        return response.data;
+    } catch (error) {
+        console.error("Create Room API Error:", error.response?.data || error.message);
+        throw error.response?.data || error;
+    }
+};
+
+// Update Room
+export const updateRoom = async (id, data) => {
+    try {
+        const response = await Api.put(`/rooms/${id}`, data, getAuthConfig());
+        return response.data;
+    } catch (error) {
+        console.error("Update Room API Error:", error.response?.data || error.message);
+        throw error.response?.data || error;
+    }
+};
+
+// Delete Room
+export const deleteRoom = async (id) => {
+    try {
+        const response = await Api.delete(`/rooms/${id}`, getAuthConfig());
+        return response.data;
+    } catch (error) {
+        console.error("Delete Room API Error:", error.response?.data || error.message);
         throw error.response?.data || error;
     }
 };

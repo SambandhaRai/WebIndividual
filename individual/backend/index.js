@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import { db } from "./database/db.js";
-import { userRouter, authRouter } from "./routes/index.js";
+import { userRouter, authRouter, roomRouter } from "./routes/index.js";
 import { createUploadsFolder } from "./security/helper.js";
 
 dotenv.config();
@@ -22,9 +22,12 @@ app.use(
 app.use(express.json()); // Replaces bodyParser.json()
 app.use(express.urlencoded({ extended: true })); // Handles URL-encoded data
 
+app.use("/uploads", express.static("uploads"));
+
 // Routes
 app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
+app.use("/api/rooms", roomRouter);
 
 // Ensure upload folder exists
 createUploadsFolder();
