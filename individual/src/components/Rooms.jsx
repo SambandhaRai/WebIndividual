@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Bed, Expand, ExpandIcon, ShowerHead, UsersIcon } from "lucide-react";
 import {
     Container,
@@ -36,13 +36,18 @@ import lux from "../assets/lux.png";
 function Room() {
     const [click, setClick] = useState(false);
     const [dropdown, setDropdown] = useState(false);
+    const navigate = useNavigate();  
 
     const handleClick = () => setClick(!click);
     const toggleDropdown = () => setDropdown(prev => !prev);
 
+    const bookClick = () => {
+        navigate("/book");  // Navigate to /rooms when the button is clicked
+    };
+
     return (
         <Container>
-            <BookNowBtn2>BOOK NOW</BookNowBtn2>
+            <BookNowBtn2 onClick={bookClick}>BOOK NOW</BookNowBtn2>
             <NavContainer>
                 <Nav>
                     <NavList>
@@ -85,7 +90,7 @@ function Room() {
                     </h1>
                     {/* <hr /> */}
                     <p>Indulge in luxury with our beautifully designed rooms and suites, offering the perfect blend of comfort and elegance for every guest</p>
-                    <BookNowBtn2>Book Now</BookNowBtn2>
+                    <BookNowBtn2 onClick={bookClick}>Book Now</BookNowBtn2>
                 </AboutContainer>
                 <RoomContainer>
                     <RoomText>
@@ -121,7 +126,7 @@ function Room() {
                                 <hr />
                             </RoomInfo>
                             <LearnMoreBtn>Learn More</LearnMoreBtn>
-                            <BookNowBtn>Book Now</BookNowBtn>
+                            <BookNowBtn onClick={bookClick}>Book Now</BookNowBtn>
                         </RoomCard>
 
                         <RoomCard>
@@ -149,7 +154,7 @@ function Room() {
                                 <hr />
                             </RoomInfo>
                             <LearnMoreBtn>Learn More</LearnMoreBtn>
-                            <BookNowBtn>Book Now</BookNowBtn>
+                            <BookNowBtn onClick={bookClick}>Book Now</BookNowBtn>
                         </RoomCard>
 
                         <RoomCard>
@@ -177,7 +182,7 @@ function Room() {
                                     <hr />
                             </RoomInfo>
                             <LearnMoreBtn>Learn More</LearnMoreBtn>
-                            <BookNowBtn>Book Now</BookNowBtn>
+                            <BookNowBtn onClick={bookClick}>Book Now</BookNowBtn>
                         </RoomCard>
 
                         <RoomCard>
@@ -209,7 +214,7 @@ function Room() {
                                     <hr />
                             </RoomInfo>
                             <LearnMoreBtn>Learn More</LearnMoreBtn>
-                            <BookNowBtn>Book Now</BookNowBtn>
+                            <BookNowBtn onClick={bookClick}>Book Now</BookNowBtn>
                         </RoomCard>
 
                         <RoomCard>
@@ -241,7 +246,7 @@ function Room() {
                                     <hr />
                             </RoomInfo>
                             <LearnMoreBtn>Learn More</LearnMoreBtn>
-                            <BookNowBtn>Book Now</BookNowBtn>
+                            <BookNowBtn onClick={bookClick}>Book Now</BookNowBtn>
                         </RoomCard>
                     </Rooms>
                 </RoomContainer>

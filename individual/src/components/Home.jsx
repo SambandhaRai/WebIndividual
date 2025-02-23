@@ -53,9 +53,13 @@ function Home() {
         navigate("/rooms");  // Navigate to /rooms when the button is clicked
     };
 
+    const bookClick = () => {
+        navigate("/book");  // Navigate to /rooms when the button is clicked
+    };
+
     return (
         <Container>
-            <BookNowBtn2>BOOK NOW</BookNowBtn2>
+            <BookNowBtn2 onClick={bookClick}>BOOK NOW</BookNowBtn2>
             <NavContainer>
                 <Nav>
                     <NavList>
@@ -137,7 +141,7 @@ function Home() {
                                 <hr />
                             </RoomInfo>
                             <LearnMoreBtn>Learn More</LearnMoreBtn>
-                            <BookNowBtn>Book Now</BookNowBtn>
+                            <BookNowBtn onClick={bookClick}>Book Now</BookNowBtn>
                         </RoomCard>
 
                         <RoomCard>
@@ -165,7 +169,7 @@ function Home() {
                                 <hr />
                             </RoomInfo>
                             <LearnMoreBtn>Learn More</LearnMoreBtn>
-                            <BookNowBtn>Book Now</BookNowBtn>
+                            <BookNowBtn onClick={bookClick}>Book Now</BookNowBtn>
                         </RoomCard>
 
                         <RoomCard>
@@ -193,7 +197,7 @@ function Home() {
                                     <hr />
                             </RoomInfo>
                             <LearnMoreBtn>Learn More</LearnMoreBtn>
-                            <BookNowBtn>Book Now</BookNowBtn>
+                            <BookNowBtn onClick={bookClick}>Book Now</BookNowBtn>
                         </RoomCard>
                     </Rooms>
                     <ViewAllBtn onClick={roomsClick}>View All</ViewAllBtn>

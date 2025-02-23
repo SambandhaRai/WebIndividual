@@ -68,7 +68,7 @@ export const IconText = styled.div`
   font-family: "Times New Roman", Times, serif; 
   font-size: 1rem;
   color: black;
-`
+`;
 
 // Content Space
 export const Content = styled.div`

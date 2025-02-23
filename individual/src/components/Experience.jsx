@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Bed, Expand, ExpandIcon, ShowerHead, UsersIcon } from "lucide-react";
 import {
     Container,
@@ -29,6 +29,7 @@ import fbath from "../assets/fbath.png"
 function Room() {
     const [click, setClick] = useState(false);
     const [dropdown, setDropdown] = useState(false);
+    const navigate = useNavigate();  
 
     const handleClick = () => setClick(!click);
     const toggleDropdown = () => setDropdown(prev => !prev);
@@ -66,9 +67,13 @@ function Room() {
         }
     ];
 
+    const bookClick = () => {
+        navigate("/book"); 
+    };
+
     return (
         <Container>
-            <BookNowBtn2>BOOK NOW</BookNowBtn2>
+            <BookNowBtn2 onClick={bookClick}>BOOK NOW</BookNowBtn2>
             <NavContainer>
                 <Nav>
                     <NavList>
