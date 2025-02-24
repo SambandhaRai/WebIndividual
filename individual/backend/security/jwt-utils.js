@@ -1,16 +1,20 @@
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+
 dotenv.config();
 
-console.log("JWT_SECRET:", process.env.JWT_SECRET);
-
-const generateToken = (payload) => {
-  const options = {
-    expiresIn: process.env.JWT_EXPIRATION || '1h', // Default expiration
+const generateToken = (user) => {
+  const payload = {
+    id: user.id,
+    email: user.email,
+    isAdmin: user.email === "resortadmin@gmail.com", 
   };
+
+  const options = {
+    expiresIn: process.env.JWT_EXPIRES_IN || "1d", 
+  };
+
   return jwt.sign(payload, process.env.JWT_SECRET, options);
 };
-  
-  export {
-    generateToken,
-  }
+
+export { generateToken };

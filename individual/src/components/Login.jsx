@@ -2,7 +2,6 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import axios from "axios";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
@@ -25,14 +24,13 @@ import {
     LinkText
 } from "../styles/login";
 import { loginApi } from "../apis/api.jsx";
-import { useState } from "react";
 
 const Login = () => {
     const { register, handleSubmit, reset } = useForm();
     const navigate = useNavigate();
 
     const onSubmit = async (data) => {
-        console.log("📤 Sending Login Data:", data);
+        console.log("Sending Login Data:", data);
     
         if (!data.email || !data.password) {
             toast.error("Email and Password are required!");
@@ -40,19 +38,27 @@ const Login = () => {
         }
     
         try {
-            const res = await loginApi(data);
-            console.log("📥 Backend Response:", res.data);
+            const res = await loginApi(data); // loginApi already returns `res.data`
+            console.log("Backend Response:", res);
     
             if (res && res.access_token) {
-                // Adjusted token storage method
-                localStorage.setItem("token", res.access_token);
+                // Store token and user info in localStorage
+                localStorage.setItem("token", res.access_token);  // Store access token
+                localStorage.setItem("user", JSON.stringify(res.user));  // Store user info
+                
                 toast.success(res.message || "Login successful!");
-                navigate("/home");
+
+                // Redirect based on role (change "resortadmin@gmail.com" as needed)
+                if (res.user.email === "resortadmin@gmail.com") {
+                    navigate("/admindsh"); // Redirect admin
+                } else {
+                    navigate("/home"); // Redirect normal users
+                }
             } else {
                 toast.error(res?.message || "Login failed! No token received.");
             }
         } catch (err) {
-            console.error("❌ Login error:", err);
+            console.error("Login error:", err);
             toast.error(err.response?.data?.message || "Invalid credentials or server issue.");
         }
     
@@ -102,7 +108,7 @@ const Login = () => {
                                 required
                             />
                         </FormGroup>
-                        <Button type="submit" onClick={onSubmit}>Login</Button>
+                        <Button type="submit">Login</Button>
                     </Form>
                     <FooterText>
                         Don't have an account? <LinkText to="/signup">Sign up</LinkText>

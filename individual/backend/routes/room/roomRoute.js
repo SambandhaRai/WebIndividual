@@ -1,31 +1,21 @@
 import express from "express";
-import { roomController } from "../../controller/room/roomController.js";
+import {
+  create,
+  getAll,
+  getById,
+  update,
+  deleteById,
+} from "../../controller/room/roomController.js";
 import { authGuard, authGuardAdmin } from "../../middleware/token-middleware.js";
-import multer from "multer";
-import path from "path";
+import upload from "../../middleware/multerConfig.js";
 
 const router = express.Router();
 
-// Multer setup for file uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
-
-const upload = multer({ storage });
-
-router.post("/create", authGuardAdmin, upload.single("image"), roomController.create);
-
-router.get("/", roomController.getAll);
-
-router.get("/:id", roomController.getById);
-
-router.put("/:id", authGuardAdmin, upload.single("image"), roomController.update);
-
-router.delete("/:id", authGuardAdmin, roomController.deleteById);
+// Routes
+router.post("/create", authGuard, authGuardAdmin, upload.single("image"), create);
+router.get("/", getAll);
+router.get("/:id", getById);
+router.put("/:id", authGuard, authGuardAdmin, upload.single("image"), update);
+router.delete("/:id", authGuard, authGuardAdmin, deleteById);
 
 export { router as roomRouter };

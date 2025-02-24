@@ -13,6 +13,16 @@ const login = async (req, res) => {
       return res.status(400).json({ message: "Email and password are required" });
     }
 
+    // Hardcoded admin credentials
+    if (email === "resortadmin@gmail.com" && password === "Admin@123") {
+      const token = generateToken({ id: "admin", email: "resortadmin@gmail.com" });
+      return res.status(200).json({
+        access_token: token, // Make sure this is sent correctly
+        user: { id: "admin", name: "Admin", email: "resortadmin@gmail.com" },
+        message: "Admin login successful",
+    });    
+    }
+
     const user = await User.findOne({ where: { email } });
     if (!user) {
       return res.status(404).json({ message: "User not found" });

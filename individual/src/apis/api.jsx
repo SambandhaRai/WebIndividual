@@ -9,30 +9,39 @@ const Api = axios.create({
 
 // Function to get the authentication token dynamically
 const getAuthConfig = () => {
-    const token = localStorage.getItem("token");
-    return token ? { headers: { Authorization: `Bearer ${token}` } } : {};
+    const token = localStorage.getItem('token');
+    return {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        }
+    };
 };
+
 
 //  Login API - Stores token in localStorage
 export const loginApi = async (data) => {
     try {
         const response = await Api.post("/auth/login", data);
 
-        // Extract token from response
-        const token = response?.data?.access_token; 
+        // Extract token & user info
+        const token = response?.data?.access_token;
+        const user = response?.data?.user; // User info
+
         if (token) {
             localStorage.setItem("token", token);
-            console.log(" Token Stored:", token);
+            localStorage.setItem("user", JSON.stringify(user)); // Store user info
+            console.log("Token & User Stored:", token, user);
         } else {
-            console.error(" No token received from server!");
+            console.error("No token received from server!");
         }
 
-        return response.data; // Returning only the necessary data
+        return response.data;
     } catch (error) {
-        console.error(" Login API Error:", error.response?.data || error.message);
+        console.error("Login API Error:", error.response?.data || error.message);
         throw error.response?.data || error;
     }
 };
+
 
 //  Register API
 export const registerApi = async (data) => {
@@ -120,7 +129,7 @@ export const getAllRooms = async () => {
         const response = await Api.get("/rooms", getAuthConfig());
         return response.data;
     } catch (error) {
-        console.error(" Get Rooms API Error:", error.response?.data || error.message);
+        console.error("Get Rooms API Error:", error.response?.data || error.message);
         throw error.response?.data || error;
     }
 };

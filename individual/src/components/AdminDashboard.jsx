@@ -41,38 +41,35 @@ const AdminDashboard = () => {
     const onSubmit = async (data) => {
         console.log("Submitting form with createRoom API...", data);
     
-        // Validate that all required fields are filled
         if (!data.roomName || !data.roomDetails || !data.image[0]) {
             toast.error("All fields are required!");
             return;
         }
     
-        // Create FormData to send with the request
         const formData = new FormData();
         formData.append("name", data.roomName);
         formData.append("details", data.roomDetails);
-        formData.append("features", JSON.stringify(selectedFeatures));  // Send selected features as JSON
+        formData.append("features", JSON.stringify(selectedFeatures));
         formData.append("image", data.image[0]);
     
         try {
-            console.log("📤 Sending Room Data:", formData);
-            const res = await createRoom(formData);  // Send FormData to backend
-            console.log("📥 Backend Response:", res);
+            console.log("Sending Room Data:", formData);
+            const res = await createRoom(formData); // Send FormData to backend
+            console.log("Backend Response:", res);
     
             if (res.status === 201) {
                 toast.success(res.data.message || "Room created successfully!", { className: "toast-success" });
-                console.log("Navigating to dashboard...");
-                setTimeout(() => navigate("/dashboard"), 1000);
+                setTimeout(() => navigate("/admindsh"), 1000); // Redirect to /admindsh
             } else {
                 toast.error(res.data.message || "Room creation failed!", { className: "toast-error" });
             }
         } catch (err) {
-            console.error("❌ Room creation error:", err);
+            console.error("Room creation error:", err);
             toast.error(err.response?.data?.message || "Failed to create room. Please try again.");
         }
     
         reset();
-    };
+    };        
     
         
 
