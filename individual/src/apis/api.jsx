@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 
 // Axios instance with base URL
 const Api = axios.create({
@@ -68,8 +69,9 @@ export const getCurrentUser = async () => {
 //  Logout Function - Clears Token
 export const logout = () => {
     localStorage.removeItem("token");
+    toast.success("Successfully logged out!");  
     console.log("User logged out, token removed.");
-    window.location.href = "/"; // Redirect to login page
+    window.location.href = "/login"; // Redirect to login page
 };
 
 //  Protected User APIs (Require Token) 
@@ -146,9 +148,16 @@ export const getRoomById = async (id) => {
 };
 
 // Create Room
-export const createRoom = async (data) => {
+export const createRoom = async (formData) => {
     try {
-        const response = await Api.post("/rooms/create", data, getAuthConfig());
+        const response = await Api.post("/rooms/create", formData, {
+            ...getAuthConfig(),
+            headers: {
+                ...getAuthConfig().headers, // Preserve Authorization token
+                "Content-Type": "multipart/form-data", // Ensure proper handling of file uploads
+            },
+        });
+
         return response.data;
     } catch (error) {
         console.error("Create Room API Error:", error.response?.data || error.message);

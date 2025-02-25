@@ -3,50 +3,88 @@ import { Link } from "react-router-dom";
 
 export const Container = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   width: 100vw;
   height: 100vh;
   background-color: #EEDDB8;
+`;
+
+// Sidebar
+export const Sidebar = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 20vw;
+  heigth: 100vh;
+  background-color: #D8C49A;
+`;
+
+export const SidebarNav = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 5vh;
+  width: 100%;
+  height: 13vh;
+  text-align: center; 
+  background-color: #C8B78E; 
+`;
+
+export const SidebarContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  font-family: "Times New Roman", Times, serif; 
+  font-size: 1rem;
+  color: black;
+  text-align: left;
+
+`;
+
+export const SideIcons = styled.div`
+  display: flex;
+  justify-content: left;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 1vh;
+`;
+
+export const SideIconText = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 15px; 
+  font-family: "Times New Roman", Times, serif; 
+  font-size: 1.5rem;
+  color: black;
+  margin-left: 5vh;
+  margin-top: 5vh;
+`;
+
+
+// Real Content
+export const Main = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 80vw;
+  height: 100vh;
 `;
 
 // Navigation Bar
 export const NavContainer = styled.div`
   display: flex;
   align-items: left;
-  width: 100vw;
+  width: 80vw;
   height: 13vh;
   background-color: #D9A24A;
-  /* Remove position: fixed */
 `;
 
 export const Nav = styled.nav`
   display: flex;
   flex-direction: row;
   width: 100%;
-  align-items: center; /* Align items vertically */
-`;
-
-export const NavList = styled.ul`
-  display: flex;
-  list-style: none;
-  padding: 0;
-  margin: 0;
+  align-items: center;
+  justify-content: center;
+  font-family: "Times New Roman", Times, serif";
   color: black;
-`;
-
-export const NavItem = styled.li`
-  display: flex;
-  flex-direction: row;
-  font-family: "Times New Roman", Times, serif;
-  font-size: 15px;
-  margin: 0 50px; 
-  gap: 5vh;
-  color: white;
-  position: relative;
-  
-  &:nth-child(1) {
-    margin-right: 100px;
-  }
 `;
 
 export const Icons = styled.div`
@@ -54,19 +92,14 @@ export const Icons = styled.div`
   justify-content: left;
   gap: 20px;
   flex-wrap: wrap;
-
-  &:nth-child(1){
-    margin-left: 2vh;
-  }
-  
 `;
 
 export const IconText = styled.div`
   display: flex;
   align-items: center;
-  gap: 10px; 
+  gap: 15px; 
   font-family: "Times New Roman", Times, serif; 
-  font-size: 1rem;
+  font-size: 1.5rem;
   color: black;
 `;
 
@@ -75,10 +108,10 @@ export const Content = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  width: 100vw;
+  justify-content: center;
+  width: 80vw;
   height: calc(100vh - 13vh);
-  padding-top: 5vh;
+  padding-top: 20vh;
   overflow-y: auto;
 `;
 

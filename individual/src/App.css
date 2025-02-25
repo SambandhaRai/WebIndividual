@@ -18,6 +18,70 @@
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
+/* Updated Loading Container */
+.loading-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 150px;  /* Adjust width as needed */
+  height: 100px;  /* Adjust height as needed */
+  background-color: #333; /* Dark background for contrast */
+  border-radius: 8px;
+  padding: 10px;
+  z-index: 9999; /* Ensure it stays on top */
+}
+
+/* Loading Dots */
+.loading-dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.loading-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #FEDD00;  /* Yellow color for visibility */
+  animation: bounce 1.2s infinite ease-in-out;
+}
+
+/* Individual dot animation with delay */
+.loading-dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.loading-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loading-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* Bounce Animation */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Loading Text Style */
+.loading-text {
+  font-size: 1.2rem;
+  color: #FEDD00;
+  font-weight: bold;
+  margin-top: 15px;
+}
+
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);

@@ -70,7 +70,7 @@ const init = async (req, res) => {
       message: "Successfully fetched current user" 
     });
   } catch (error) {
-    console.error("❌ Fetch User Error:", error);
+    console.error("Fetch User Error:", error);
     res.status(500).json({ error: "Failed to fetch user" });
   }
 };

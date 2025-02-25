@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Bed, ShowerHead, UsersIcon } from "lucide-react";
+import { getCurrentUser, logout } from "../apis/api"; 
 import {
     Container,
     NavContainer, 
@@ -44,7 +45,7 @@ import club from "../assets/clubRoom.jpeg";
 function Home() {
     const [click, setClick] = useState(false);
     const [dropdown, setDropdown] = useState(false);
-    const navigate = useNavigate();  
+    const navigate = useNavigate();
 
     const handleClick = () => setClick(!click);
     const toggleDropdown = () => setDropdown(prev => !prev);
@@ -84,8 +85,8 @@ function Home() {
                                 <StyledMenuIcon size={24} />// Render MenuIcon when not clicked
                             )}
                             <MenuIconDropdown $dropdown={click}>
-                                <DropdownItem><Link to="/login">Login</Link></DropdownItem>
-                                <DropdownItem><Link to="/signup">Sign Up</Link></DropdownItem>
+                                        <DropdownItem><Link to="/login">Login</Link></DropdownItem>
+                                        <DropdownItem><Link to="/signup">Sign Up</Link></DropdownItem>
                             </MenuIconDropdown>
                         </NavItem>
                     </NavList>

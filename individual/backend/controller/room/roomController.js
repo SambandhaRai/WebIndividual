@@ -1,20 +1,6 @@
 import { Room } from "../../model/index.js";
 import { sequelize } from "../../database/db.js";
-import multer from "multer";
-import path from "path";
-import fs from "fs";
-
-// Configure Multer for file uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/"); // Store images in the uploads folder
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); // Unique filename
-  },
-});
-
-const upload = multer({ storage });
+import cloudinary from "../../uploads/cloudinaryConfig.js";
 
 // Fetch all rooms
 export const getAll = async (req, res) => {
@@ -33,6 +19,8 @@ export const create = async (req, res) => {
   try {
     let { name, details, features } = req.body;
 
+    console.log("Request Body:", req.body);
+
     console.log("Received features:", features);
     console.log("Type of features:", typeof features);
 
@@ -40,19 +28,42 @@ export const create = async (req, res) => {
       return res.status(400).json({ error: "Room name and details are required" });
     }
 
-    // Convert features to an object if it's a string
+    /// Convert features to an object if it's a string
     if (typeof features === "string") {
       try {
-        features = JSON.parse(features);
+        features = JSON.parse(features); // Parse the string to JSON
       } catch (err) {
         return res.status(400).json({ error: "Invalid JSON format for features" });
       }
     }
 
-    let imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
+    // Log the features to ensure it's properly parsed
+    console.log("Features after parsing:", features);
+
+
+    let imageUrl = null;
+    let publicId = null;
+
+    // Upload image to Cloudinary if file is provided
+    if (req.file) {
+      try {
+        const result = await cloudinary.uploader.upload(req.file.path, {
+          folder: "room_images",
+        });
+        imageUrl = result.secure_url;
+        publicId = result.public_id;
+
+        // Log the image URL after upload
+        console.log("Image uploaded successfully. URL:", imageUrl);
+
+      } catch (uploadError) {
+        console.error("Cloudinary upload error:", uploadError);
+        return res.status(500).json({ error: "Failed to upload image" });
+      }
+    }
 
     const room = await Room.create(
-      { name, details, features, imageUrl },
+      { name, details, features, imageUrl, publicId },
       { transaction }
     );
 
@@ -64,7 +75,6 @@ export const create = async (req, res) => {
     res.status(500).json({ error: "Failed to create room" });
   }
 };
-
 
 // Fetch a room by ID
 export const getById = async (req, res) => {
@@ -88,21 +98,28 @@ export const update = async (req, res) => {
     if (!room) return res.status(404).json({ error: "Room not found" });
 
     let imageUrl = room.imageUrl;
+    let publicId = room.publicId;
 
+    // If a new image is provided, replace the old one in Cloudinary
     if (req.file) {
-      if (room.imageUrl) {
-        // Delete the old image from the uploads folder
-        const oldImagePath = path.join("uploads", path.basename(room.imageUrl));
-        if (fs.existsSync(oldImagePath)) fs.unlinkSync(oldImagePath);
-      }
+      try {
+        if (publicId) await cloudinary.uploader.destroy(publicId);
 
-      imageUrl = `/uploads/${req.file.filename}`;
+        const result = await cloudinary.uploader.upload(req.file.path, {
+          folder: "room_images",
+        });
+        imageUrl = result.secure_url;
+        publicId = result.public_id;
+      } catch (uploadError) {
+        console.error("Cloudinary upload error:", uploadError);
+        return res.status(500).json({ error: "Failed to upload image" });
+      }
     }
 
     await room.update(
-      { name, details, features, imageUrl },  
+      { name, details, features, imageUrl, publicId },
       { transaction }
-    );    
+    );
 
     await transaction.commit();
     res.status(200).json({ message: "Room updated successfully", room });
@@ -120,10 +137,13 @@ export const deleteById = async (req, res) => {
     const room = await Room.findByPk(req.params.id);
     if (!room) return res.status(404).json({ error: "Room not found" });
 
-    if (room.imageUrl) {
-      // Delete the image from the uploads folder
-      const imagePath = path.join("uploads", path.basename(room.imageUrl));
-      if (fs.existsSync(imagePath)) fs.unlinkSync(imagePath);
+    // Delete image from Cloudinary
+    if (room.publicId) {
+      try {
+        await cloudinary.uploader.destroy(room.publicId);
+      } catch (deleteError) {
+        console.error("Cloudinary delete error:", deleteError);
+      }
     }
 
     await room.destroy({ transaction });
@@ -137,4 +157,3 @@ export const deleteById = async (req, res) => {
 };
 
 export const roomController = { getAll, create, getById, update, deleteById };
-export const uploadMiddleware = upload.single("image"); // Multer middleware for image uploads
