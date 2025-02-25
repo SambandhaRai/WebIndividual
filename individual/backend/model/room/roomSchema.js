@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../../database/db.js";
 
-export const Room = sequelize.define("rooms", {
+export const Room = sequelize.define("room", {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -15,12 +15,24 @@ export const Room = sequelize.define("rooms", {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-  features: {
-    type: DataTypes.JSON,
-    allowNull: true,
-  },
   imageUrl: {
     type: DataTypes.STRING,
     allowNull: true,
+  },
+  bedType: {
+    type: DataTypes.STRING, 
+    allowNull: false,
+  },
+  bathroom: {
+    type: DataTypes.STRING, 
+    allowNull: false,
+  },
+  adultOccupants: {
+    type: DataTypes.STRING, 
+    allowNull: false,
+  },
+  childOccupants: {
+    type: DataTypes.STRING,
+    allowNull: false,
   },
 });

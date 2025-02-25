@@ -79,18 +79,18 @@ export const logout = () => {
 
 // ----------------- USER APIs ---------------------
 
-//  Get All Users (Admin or Authenticated Users)
+// Get All Users (Admin or Authenticated Users)
 export const getAllUsers = async () => {
     try {
         const response = await Api.get("/users", getAuthConfig());
         return response.data;
     } catch (error) {
-        console.error(" Get Users API Error:", error.response?.data || error.message);
+        console.error("Get Users API Error:", error.response?.data || error.message);
         throw error.response?.data || error;
     }
 };
 
-//  Get User by ID
+// Get User by ID
 export const getUserById = async (id) => {
     try {
         const response = await Api.get(`/users/${id}`, getAuthConfig());
@@ -101,7 +101,7 @@ export const getUserById = async (id) => {
     }
 };
 
-//  Update User
+// Update User
 export const updateUser = async (id, data) => {
     try {
         const response = await Api.put(`/users/${id}`, data, getAuthConfig());
@@ -166,9 +166,15 @@ export const createRoom = async (formData) => {
 };
 
 // Update Room
-export const updateRoom = async (id, data) => {
+export const updateRoom = async (id, formData) => {
     try {
-        const response = await Api.put(`/rooms/${id}`, data, getAuthConfig());
+        const response = await Api.put(`/rooms/${id}`, formData, {
+            ...getAuthConfig(),
+            headers: {
+                ...getAuthConfig().headers, // Preserve Authorization token
+                "Content-Type": "multipart/form-data", // Ensure proper handling of file uploads
+            },
+        });
         return response.data;
     } catch (error) {
         console.error("Update Room API Error:", error.response?.data || error.message);

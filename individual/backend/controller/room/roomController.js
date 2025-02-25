@@ -17,29 +17,11 @@ export const getAll = async (req, res) => {
 export const create = async (req, res) => {
   const transaction = await sequelize.transaction();
   try {
-    let { name, details, features } = req.body;
+    let { name, details, bedType, bathroom, adultOccupants, childOccupants } = req.body;
 
-    console.log("Request Body:", req.body);
-
-    console.log("Received features:", features);
-    console.log("Type of features:", typeof features);
-
-    if (!name || !details) {
-      return res.status(400).json({ error: "Room name and details are required" });
+    if (!name || !details || !bedType || !bathroom || !adultOccupants || !childOccupants) {
+      return res.status(400).json({ error: "Room name, details, bed type, bathroom, and occupant details are required" });
     }
-
-    /// Convert features to an object if it's a string
-    if (typeof features === "string") {
-      try {
-        features = JSON.parse(features); // Parse the string to JSON
-      } catch (err) {
-        return res.status(400).json({ error: "Invalid JSON format for features" });
-      }
-    }
-
-    // Log the features to ensure it's properly parsed
-    console.log("Features after parsing:", features);
-
 
     let imageUrl = null;
     let publicId = null;
@@ -52,18 +34,24 @@ export const create = async (req, res) => {
         });
         imageUrl = result.secure_url;
         publicId = result.public_id;
-
-        // Log the image URL after upload
-        console.log("Image uploaded successfully. URL:", imageUrl);
-
       } catch (uploadError) {
         console.error("Cloudinary upload error:", uploadError);
         return res.status(500).json({ error: "Failed to upload image" });
       }
     }
 
+    // Save room data with string values for occupants
     const room = await Room.create(
-      { name, details, features, imageUrl, publicId },
+      { 
+        name, 
+        details, 
+        bedType, 
+        bathroom, 
+        adultOccupants: String(adultOccupants), // Ensure it's a string
+        childOccupants: String(childOccupants), // Ensure it's a string
+        imageUrl, 
+        publicId 
+      },
       { transaction }
     );
 
@@ -93,7 +81,7 @@ export const getById = async (req, res) => {
 export const update = async (req, res) => {
   const transaction = await sequelize.transaction();
   try {
-    const { name, details, features } = req.body;
+    const { name, details, bedType, bathroom, adultOccupants, childOccupants } = req.body;
     const room = await Room.findByPk(req.params.id);
     if (!room) return res.status(404).json({ error: "Room not found" });
 
@@ -117,7 +105,16 @@ export const update = async (req, res) => {
     }
 
     await room.update(
-      { name, details, features, imageUrl, publicId },
+      { 
+        name, 
+        details, 
+        bedType, 
+        bathroom, 
+        adultOccupants: String(adultOccupants),
+        childOccupants: String(childOccupants), 
+        imageUrl, 
+        publicId 
+      },
       { transaction }
     );
 

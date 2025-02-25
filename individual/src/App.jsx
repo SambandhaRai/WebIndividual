@@ -18,7 +18,11 @@ const Experience = React.lazy(() => import("./components/Experience"));
 
 const Book = React.lazy(() => import("./components/Book"));
 
+const AdminDashboard = React.lazy(() => import("./components/AdminDashboard"))
+
 const AdminAddRoom = React.lazy(() => import("./components/AdminAddRoom"));
+
+const AdminUpdateRoom = React.lazy(() => import("./components/AdminUpdateRoom"));
 
 
 function App() {
@@ -35,7 +39,9 @@ function App() {
           <Route path="/rooms" element={<Rooms />} />
           <Route path="/experience" element={<Experience />} />
           <Route path="/book" element={<Book />} />
+          <Route path="/dashboard" element={<AdminDashboard />} />
           <Route path="/adminadd" element={<AdminAddRoom />} />
+          <Route path="/adminupd" element={<AdminUpdateRoom />} />  
         </Routes>
       </Suspense>
     </Router>

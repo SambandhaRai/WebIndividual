@@ -107,12 +107,12 @@ export const IconText = styled.div`
 export const Content = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items: center; 
+  justify-content: center; 
   width: 80vw;
   height: calc(100vh - 13vh);
-  padding-top: 20vh;
   overflow-y: auto;
+  padding-top: 0;
 `;
 
 // Form Container
@@ -122,12 +122,12 @@ export const FormContainer = styled.div`
   padding-right: 8vh;
   padding-bottom: 8vh;
   padding-top: 8vh;
-  margin-top: 25vh;
+  margin-top: 55vh;
   margin-bottom: 8vh;
   border-radius: 8px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
-  width: 350px;
+  width: 550px;
   height: auto;
 `;
 
@@ -334,4 +334,109 @@ export const Select = styled.select`
     background-color: #EAE1D8; 
     border-color: #B77729;
   }
+`;
+
+// Search Input Field
+export const SearchInput = styled.input`
+  background-color: #EAE1D8;  
+  color: black;
+  padding: 10px;
+  border: 1px solid #B77729;
+  border-radius: 5px;
+  font-size: 1rem;
+  outline: none;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  transition: border 0.3s ease, background 0.3s ease;
+
+  &:focus {
+    background-color: #EAE1D8; 
+    border-color: #B77729;
+  }
+`;
+
+// Room Grid
+export const RoomGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); // 3 cards per row
+  gap: 1.5vh;
+  justify-content: center;
+  width: 100%;
+  padding: 0 20px; // Add padding to avoid overflow
+`;
+
+export const RoomCard = styled.div`
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  width: 100%; // Adjust width to fit grid
+  height: auto; // Adjust height dynamically
+  margin-bottom: 3vh;
+  text-align: center;
+  transition: transform 0.3s ease-in-out;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+`;
+
+export const RoomImage = styled.img`
+  width: 100%;
+  height: 31vh;
+  object-fit: cover;
+`;
+
+export const RoomInfo = styled.div`
+  padding: 2vh;
+  height: auto; // Adjust height dynamically
+
+  h2 {
+    font-family: "Times New Roman", Times, serif; 
+    font-size: 1.5rem;
+    color: #B77729;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+
+  p {
+    font-family: "Times New Roman", Times, serif; 
+    font-size: 15px;
+    color: #444;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+
+  hr {
+    border: none;
+    height: 1px;
+    background-color: #B77729;
+    margin: 10px 0;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+`;
+
+export const RoomInfoText = styled.div`
+  width: 100%;
+  height: auto; // Adjust height dynamically
+`;
+
+export const RoomIcons = styled.div`
+  display: flex;
+  justify-content: left;
+  margin-left: 5vh;
+  gap: 20px;
+  flex-wrap: wrap;
+`;
+
+export const RoomIconText = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px; 
+  font-family: "Times New Roman", Times, serif; 
+  font-size: 1rem;
+  color: #B77729;
 `;

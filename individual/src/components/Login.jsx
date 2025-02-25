@@ -50,7 +50,7 @@ const Login = () => {
 
                 // Redirect based on role (change "resortadmin@gmail.com" as needed)
                 if (res.user.email === "resortadmin@gmail.com") {
-                    navigate("/adminadd"); // Redirect admin
+                    navigate("/dashboard"); // Redirect admin
                 } else {
                     navigate("/home"); // Redirect normal users
                 }

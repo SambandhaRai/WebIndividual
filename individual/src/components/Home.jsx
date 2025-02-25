@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Bed, ShowerHead, UsersIcon } from "lucide-react";
-import { getCurrentUser, logout } from "../apis/api"; 
+import { getCurrentUser, logout, getAllRooms } from "../apis/api"; 
 import {
     Container,
     NavContainer, 
@@ -45,17 +45,31 @@ import club from "../assets/clubRoom.jpeg";
 function Home() {
     const [click, setClick] = useState(false);
     const [dropdown, setDropdown] = useState(false);
+    const [rooms, setRooms] = useState([]);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchRooms = async () => {
+            try {
+                const response = await getAllRooms();
+                setRooms(response.data); // Assuming the response has a `data` field containing the rooms
+            } catch (error) {
+                console.error("Error fetching rooms:", error);
+            }
+        };
+
+        fetchRooms();
+    }, []);
 
     const handleClick = () => setClick(!click);
     const toggleDropdown = () => setDropdown(prev => !prev);
 
     const roomsClick = () => {
-        navigate("/rooms");  // Navigate to /rooms when the button is clicked
+        navigate("/rooms");
     };
 
     const bookClick = () => {
-        navigate("/book");  // Navigate to /rooms when the button is clicked
+        navigate("/book");
     };
 
     return (
@@ -117,89 +131,35 @@ function Home() {
                         <p>Choose your perfect stay in our elegantly appointed rooms, where luxury meets comfort. Each room offers a serene retreat with stunning views, ensuring a memorable and restful experience.</p>
                     </RoomText>
                     <Rooms>
-                        <RoomCard>
-                            <RoomImage src={ctg} alt="Cottage Room" />
-                            <RoomInfo>
-                                <h2>Cottage Room</h2>
-                                <RoomInfoText>
-                                    <p>Unwind and find your inner peace as you relax in our fully air-conditioned Cottage Rooms.</p>
-                                </RoomInfoText>
-                                <hr />
+                        {rooms.map((room) => (
+                            <RoomCard key={room.id}>
+                                <RoomImage src={room.imageUrl} alt={room.name} />
+                                <RoomInfo>
+                                    <h2>{room.name}</h2>
+                                    <RoomInfoText>
+                                        <p>{room.details}</p>
+                                    </RoomInfoText>
+                                    <hr />
                                     <Icons>
                                         <IconText>
                                             <Bed size={20} color="#B77729" />
-                                            <span> Double/Twin Beds</span>
+                                            <span> {room.bedType}</span>
                                         </IconText>
                                         <IconText>
                                             <ShowerHead size={20} color="#B77729" />
-                                            <span> Not Included</span>
+                                            <span> {room.bathroom}</span>
                                         </IconText>
                                         <IconText>
                                             <UsersIcon size={20} color="#B77729" />
-                                            <span> 2 Adults + 1 Child</span>
+                                            <span> {room.adultOccupants} + {room.childOccupants}</span>
                                         </IconText>
                                     </Icons>
-                                <hr />
-                            </RoomInfo>
-                            <LearnMoreBtn>Learn More</LearnMoreBtn>
-                            <BookNowBtn onClick={bookClick}>Book Now</BookNowBtn>
-                        </RoomCard>
-
-                        <RoomCard>
-                            <RoomImage src={prem} alt="Premium Room" />
-                            <RoomInfo>
-                                <h2>Premium Room</h2>
-                                <RoomInfoText>
-                                    <p>Immerse yourself in timeless elegance and comfort within our Premium Rooms, where heritage-inspired architecture meets modern luxury.</p>
-                                </RoomInfoText>
-                                <hr />
-                                    <Icons>
-                                        <IconText>
-                                            <Bed size={20} color="#B77729" />
-                                            <span> Double/Twin Beds</span>
-                                        </IconText>
-                                        <IconText>
-                                            <ShowerHead size={20} color="#B77729" />
-                                            <span> 1 Bathroom</span>
-                                        </IconText>
-                                        <IconText>
-                                            <UsersIcon size={20} color="#B77729" />
-                                            <span> 2 Adults + 1 Child</span>
-                                        </IconText>
-                                    </Icons>
-                                <hr />
-                            </RoomInfo>
-                            <LearnMoreBtn>Learn More</LearnMoreBtn>
-                            <BookNowBtn onClick={bookClick}>Book Now</BookNowBtn>
-                        </RoomCard>
-
-                        <RoomCard>
-                            <RoomImage src={club} alt="Club Room" />
-                            <RoomInfo>
-                                <h2>Club Room</h2>
-                                <RoomInfoText>
-                                    <p>Experience the perfect blend of tradition and sophistication in our Club Rooms, offering warm, inviting interiors designed for a serene and memorable stay.</p>
-                                </RoomInfoText>
                                     <hr />
-                                        <Icons>
-                                            <IconText>
-                                                <Bed size={20} color="#B77729" />
-                                                <span> Double/Twin Beds</span>
-                                            </IconText>
-                                            <IconText>
-                                                <ShowerHead size={20} color="#B77729" />
-                                                <span> 1 Bathroom</span>
-                                            </IconText>
-                                            <IconText>
-                                                <UsersIcon size={20} color="#B77729" />
-                                                <span> 2 Adults + 1 Child</span>
-                                            </IconText>
-                                        </Icons>
-                                    <hr />
-                            </RoomInfo>
-                            <LearnMoreBtn>Learn More</LearnMoreBtn>
-                            <BookNowBtn onClick={bookClick}>Book Now</BookNowBtn>
-                        </RoomCard>
+                                </RoomInfo>
+                                <LearnMoreBtn>Learn More</LearnMoreBtn>
+                                <BookNowBtn onClick={bookClick}>Book Now</BookNowBtn>
+                            </RoomCard>
+                        ))}
                     </Rooms>
                     <ViewAllBtn onClick={roomsClick}>View All</ViewAllBtn>
                 </RoomContainer>
