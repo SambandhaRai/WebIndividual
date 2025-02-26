@@ -13,10 +13,10 @@ export const RoomCard = styled.div`
     border-radius: 10px;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
     overflow: hidden;
-    width: 58vh;
-    height: 80vh;
-    margin-bottom: 3vh;
-    text-align: center;
+    width: 58vh; /* Fixed width for each card */
+    height: 85vh; /* Fixed height for each card */
+    flex: 0 0 auto; /* Prevent flex items from shrinking */
+    margin-right: 20px; /* Space between cards */
     transition: transform 0.3s ease-in-out;
 
     &:hover {
@@ -67,16 +67,27 @@ export const RoomInfoText = styled.div`
 `;
 
 export const RoomIcons = styled.div`
-    display: flex;
-    justify-content: left;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 10px 20px; 
+    justify-content: center;
     margin-left: 5vh;
-    gap: 20px;
-    flex-wrap: wrap;
+    width: fit-content; 
 `;
 
 export const RoomIconText = styled.div`
     display: flex;
     align-items: center;
+    gap: 10px; 
+    font-family: "Times New Roman", Times, serif; 
+    font-size: 1rem;
+    color: #B77729;
+`;
+
+export const PriceIconText = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
     gap: 10px; 
     font-family: "Times New Roman", Times, serif; 
     font-size: 1rem;
@@ -346,4 +357,97 @@ export const Title = styled.h1`
     color: #B77729;
     margin-top: 0;
     margin-bottom: 5px;
+`;
+
+export const HorizontalScrollContainer = styled.div`
+    display: flex;
+    overflow-x: auto; 
+    gap: 1.5vh; 
+    padding: 10px 0 10px 5vh; 
+    scrollbar-width: thin; 
+    scrollbar-color: #B77729 transparent; 
+
+    &::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #B77729;
+        border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+`;
+
+export const ExpTitle = styled.h1`
+    font-family: "Times New Roman", Times, serif;
+    font-size: 3rem;
+    color: #B77729;
+    margin-top: 0;
+    margin-bottom: 5px;
+    margin-top: 10vh;
+`;
+
+// Experience
+export const ExpCard = styled.div`
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    width: 58vh; 
+    height: 90vh; 
+    flex: 0 0 auto; 
+    padding-bottom: 5vh; 
+    margin-right: 20px; 
+    margin-bottom: 20px; 
+    transition: transform 0.3s ease-in-out;
+
+    &:hover {
+        transform: scale(1.05);
+    }
+`;
+
+export const ExpImage = styled.img`
+    width: 100%;
+    height: 31vh;
+    object-fit: cover;
+`;
+
+export const ExpInfo = styled.div`
+    padding: 2vh;
+    height: 31.5vh;
+
+    h2 {
+        font-family: "Times New Roman", Times, serif; 
+        font-size: 1.5rem;
+        color: #B77729;
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+
+    p {
+        font-family: "Times New Roman", Times, serif; 
+        font-size: 15px;
+        color: #444;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+    hr {
+        border: none;
+        height: 1px;
+        background-color: #B77729;
+        margin-top: 22vh;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 5vh;
+    }
+`;
+
+export const ExpInfoText = styled.div`
+    width: 100%;
+    height: 11vh;
 `;

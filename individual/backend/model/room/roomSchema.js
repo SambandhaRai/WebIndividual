@@ -7,6 +7,11 @@ export const Room = sequelize.define("room", {
     autoIncrement: true,
     primaryKey: true,
   },
+  roomType: {
+    type: DataTypes.STRING, 
+    allowNull: false,
+    defaultValue: "Room", 
+  },
   name: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -27,6 +32,10 @@ export const Room = sequelize.define("room", {
     type: DataTypes.STRING, 
     allowNull: false,
   },
+  area: {
+    type: DataTypes.FLOAT,
+    allowNull: true,
+  },
   adultOccupants: {
     type: DataTypes.STRING, 
     allowNull: false,
@@ -35,4 +44,8 @@ export const Room = sequelize.define("room", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  price: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+  }
 });

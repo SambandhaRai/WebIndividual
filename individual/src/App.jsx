@@ -24,6 +24,10 @@ const AdminAddRoom = React.lazy(() => import("./components/AdminAddRoom"));
 
 const AdminUpdateRoom = React.lazy(() => import("./components/AdminUpdateRoom"));
 
+const AdminAddExp = React.lazy(() => import("./components/AdminAddExp"));
+
+const AdminUpdateExp = React.lazy(() => import("./components/AdminUpdateExp"));
+
 
 function App() {
 
@@ -41,7 +45,11 @@ function App() {
           <Route path="/book" element={<Book />} />
           <Route path="/dashboard" element={<AdminDashboard />} />
           <Route path="/adminadd" element={<AdminAddRoom />} />
-          <Route path="/adminupd" element={<AdminUpdateRoom />} />  
+          <Route path="/adminupd" element={<AdminUpdateRoom />} /> 
+          <Route path="/adminupd/:id" element={<AdminUpdateRoom />} /> 
+          <Route path="/addexp" element={<AdminAddExp />} /> 
+          <Route path="/updexp" element={<AdminUpdateExp />} /> 
+          <Route path="/updexp/:id" element={<AdminUpdateExp />} /> 
         </Routes>
       </Suspense>
     </Router>

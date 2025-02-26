@@ -69,6 +69,7 @@ export const getCurrentUser = async () => {
 //  Logout Function - Clears Token
 export const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
     toast.success("Successfully logged out!");  
     console.log("User logged out, token removed.");
     window.location.href = "/login"; // Redirect to login page
@@ -189,6 +190,140 @@ export const deleteRoom = async (id) => {
         return response.data;
     } catch (error) {
         console.error("Delete Room API Error:", error.response?.data || error.message);
+        throw error.response?.data || error;
+    }
+};
+
+// Fetch available rooms based on search criteria
+export const getAvailableRooms = async (searchData) => {
+    try {
+        const response = await Api.post("/rooms/available", searchData, getAuthConfig());
+        return response.data;
+    } catch (error) {
+        console.error("Get Available Rooms API Error:", error.response?.data || error.message);
+        throw error.response?.data || error;
+    }
+};
+
+// ----------------- EXPERIENCE APIs ---------------------
+
+// Create Experience
+export const createExperience = async (formData) => {
+    try {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            throw new Error("No token found. Please log in.");
+        }
+
+        const response = await axios.post(
+            "http://localhost:4000/api/experience/create",
+            formData,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+// Get All Experiences
+export const getAllExperiences = async () => {
+    try {
+        const response = await Api.get("/experience", getAuthConfig());
+        return response.data;
+    } catch (error) {
+        console.error("Get All Experiences API Error:", error.response?.data || error.message);
+        throw error.response?.data || error;
+    }
+};
+
+// Get Experience By ID
+export const getExperienceById = async (id) => {
+    try {
+        const response = await Api.get(`/experience/${id}`, getAuthConfig());
+        return response.data;
+    } catch (error) {
+        console.error("Get Experience By ID API Error:", error.response?.data || error.message);
+        throw error.response?.data || error;
+    }
+};
+
+// Update Experience
+export const updateExperience = async (id, formData) => {
+    try {
+        const response = await Api.put(`/experience/${id}`, formData, {
+            ...getAuthConfig(),
+            headers: {
+                ...getAuthConfig().headers, 
+                "Content-Type": "multipart/form-data", // For handling file uploads
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Update Experience API Error:", error.response?.data || error.message);
+        throw error.response?.data || error;
+    }
+};
+
+// Delete Experience
+export const deleteExperience = async (id) => {
+    try {
+        const response = await Api.delete(`/experience/${id}`, getAuthConfig());
+        return response.data;
+    } catch (error) {
+        console.error("Delete Experience API Error:", error.response?.data || error.message);
+        throw error.response?.data || error;
+    }
+};
+
+// ----------------- BOOKING APIs ---------------------
+
+// Create a new booking
+export const createBookingApi = async (bookingData) => {
+    try {
+        const response = await Api.post("/bookings", bookingData, getAuthConfig());
+        return response.data;
+    } catch (error) {
+        console.error("Create Booking API Error:", error.response?.data || error.message);
+        throw error.response?.data || error;
+    }
+};
+
+// Get all bookings for a user
+export const getUserBookingsApi = async (userId) => {
+    try {
+        const response = await Api.get(`/bookings/user/${userId}`, getAuthConfig());
+        return response.data;
+    } catch (error) {
+        console.error("Get User Bookings API Error:", error.response?.data || error.message);
+        throw error.response?.data || error;
+    }
+};
+
+// Update a booking (e.g., change status)
+export const updateBookingApi = async (bookingId, updateData) => {
+    try {
+        const response = await Api.put(`/bookings/${bookingId}`, updateData, getAuthConfig());
+        return response.data;
+    } catch (error) {
+        console.error("Update Booking API Error:", error.response?.data || error.message);
+        throw error.response?.data || error;
+    }
+};
+
+// Cancel a booking
+export const cancelBookingApi = async (bookingId) => {
+    try {
+        const response = await Api.delete(`/bookings/${bookingId}`, getAuthConfig());
+        return response.data;
+    } catch (error) {
+        console.error("Cancel Booking API Error:", error.response?.data || error.message);
         throw error.response?.data || error;
     }
 };

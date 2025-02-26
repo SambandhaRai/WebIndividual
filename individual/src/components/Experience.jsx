@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Bed, Expand, ExpandIcon, ShowerHead, UsersIcon } from "lucide-react";
 import {
     Container,
     NavContainer, 
@@ -20,55 +19,79 @@ import {
     ExpInfo,
     BookNowBtn2
 } from "../styles/experience";
-import hspa from "../assets/hspa.jpeg"
-import bar from "../assets/bar.png"
-import fbath from "../assets/fbath.png"
+import { getAllExperiences, getAllRooms, logout } from "../apis/api";
 
-
-
-function Room() {
+function Experiences() {
     const [click, setClick] = useState(false);
     const [dropdown, setDropdown] = useState(false);
+    const [experiences, setExperiences] = useState([]); // State to store experiences
+    const [loading, setLoading] = useState(false); // Loading state
+    const [error, setError] = useState(null); // Error state
+    const [rooms, setRooms] = useState([]); // State to store rooms
+    const [isLoggedIn, setIsLoggedIn] = useState(false); 
+    const [userEmail, setUserEmail] = useState(""); 
     const navigate = useNavigate();  
 
     const handleClick = () => setClick(!click);
     const toggleDropdown = () => setDropdown(prev => !prev);
 
-    const experiences = [
-        {
-            image: hspa,
-            title: "SPA & SWIMMING POOL",
-            description: (
-                <>
-                  An oasis of calm and tranquility, located deep within a protected forest, our luxury spa and health club welcome members and guests with a wide range of facilities and services.
-                  <br />
-                  <br />
-                  An oasis of calm and tranquility, located deep within a protected forestMelt your cares away as you rejuvenate yourself in an oasis of calm and tranquility deep within the heart of the Forest at the Harmony Spa and Health Club. Our relaxing indoor swimming pool is one-of-a-kind in Nepal. 
-                                It is the perfect place to cool down and unwind after a jungle walk, a workout at the gym.
-                </>
-              )
-        },
-        {
-            image: bar,
-            title: "DINING & BAR",
-            description: "The Resort offers a refined dining experience with a focus on quality and flavor. Our culinary philosophy is centered around using the finest ingredients to craft exceptional dishes that cater to every palate. Whether you're in the mood for a relaxed meal or a more sophisticated dining experience, our diverse offerings promise a unique and memorable gastronomic journey. Every meal is a celebration of exquisite flavors, carefully prepared to ensure your satisfaction."
-        },
-        {
-            image: fbath,
-            title: "FOREST BATHING",
-            description: (
-                <>
-                  Unwind and reconnect with nature through Forest Bathing at the Resort. This ancient Japanese practice encourages you to immerse yourself in the sights, sounds, and scents of the forest, fostering deep relaxation and mental clarity.
-                  <br />
-                  <br />
-                  As you wander through the centuries-old protected forest, our expert guides will help you embrace the healing power of nature. Breathe in the fresh air, listen to the gentle rustling of the leaves, and let the calmness of the forest restore your inner balance. A perfect escape to rejuvenate both body and mind.
-                </>
-            )
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem("user")); // Retrieve user data from localStorage
+        if (user) {
+            setIsLoggedIn(true); 
+            setUserEmail(user.email); 
         }
-    ];
+    }, []);
+
+    // Fetch experiences from the database
+    useEffect(() => {
+        const fetchExperiences = async () => {
+            setLoading(true);
+            try {
+                const response = await getAllExperiences(); 
+                // Arranging
+                const sortedExperiences = response.data.sort((a, b) => a.id - b.id);
+                setExperiences(sortedExperiences); // Set the sorted data to state
+            } catch (error) {
+                console.error("Error fetching experiences:", error);
+                setError("Failed to fetch experiences. Please try again later.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchExperiences();
+    }, []);
+
+    // Fetch rooms from the database
+    useEffect(() => {
+        const fetchRooms = async () => {
+            setLoading(true);
+            try {
+                const response = await getAllRooms(); 
+                const sortedRooms = response.data.sort((a, b) => a.id - b.id); // Sort rooms based on ID
+                setRooms(sortedRooms); // Set rooms data
+            } catch (error) {
+                console.error("Error fetching rooms:", error);
+                setError("Failed to fetch rooms. Please try again later.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchRooms();
+    }, []);
 
     const bookClick = () => {
         navigate("/book"); 
+    };
+
+    // Handle logout
+    const handleLogout = () => {
+        logout(); 
+        setIsLoggedIn(false); 
+        setUserEmail(""); 
+        navigate("/home"); 
     };
 
     return (
@@ -81,15 +104,18 @@ function Room() {
                         <NavItem onMouseEnter={toggleDropdown} onMouseLeave={toggleDropdown}>
                             <Link to="/rooms">ROOMS & SUITES</Link>
                             <DropdownMenu $dropdown={dropdown}>
-                                <DropdownItem><Link to="/rooms/cottage">Cottage Room</Link></DropdownItem>
-                                <DropdownItem><Link to="/rooms/premium">Premium Room</Link></DropdownItem>
-                                <DropdownItem><Link to="/rooms/club">Club Room</Link></DropdownItem>
+                                {/* Dynamically render rooms from API */}
+                                {rooms.map((room) => (
+                                    <DropdownItem key={room.id}>
+                                        <Link to={`/rooms/${room.name.toLowerCase()}`}>{room.name}</Link>
+                                    </DropdownItem>
+                                ))}
                             </DropdownMenu>
                         </NavItem>
                         <NavItem><Link to="/experience"
                         onClick={(e) => {
-                            e.preventDefault(); // Prevent navigation
-                            window.location.reload(); // Reload page
+                            e.preventDefault(); 
+                            window.location.reload(); 
                         }}>EXPERIENCES</Link></NavItem>
                         <NavItem><Link to="/reviews">REVIEWS</Link></NavItem>
                         <NavItem onClick={handleClick} onAbort={handleClick}>{click ? (
@@ -97,9 +123,18 @@ function Room() {
                             ) : (
                                 <StyledMenuIcon size={24} />// Render MenuIcon when not clicked
                             )}
-                            <MenuIconDropdown $dropdown={click}>
-                                <DropdownItem><Link to="/login">Login</Link></DropdownItem>
-                                <DropdownItem><Link to="/signup">Sign Up</Link></DropdownItem>
+                            <MenuIconDropdown $dropdown={click} $isLoggedIn={isLoggedIn}>
+                                {isLoggedIn ? (
+                                    <>
+                                        <DropdownItem>{userEmail}</DropdownItem>
+                                        <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
+                                    </>
+                                ) : (
+                                    <>
+                                        <DropdownItem><Link to="/login">Login</Link></DropdownItem>
+                                        <DropdownItem><Link to="/signup">Sign Up</Link></DropdownItem>
+                                    </>
+                                )}
                             </MenuIconDropdown>
                         </NavItem>
                     </NavList>
@@ -111,27 +146,32 @@ function Room() {
                     <p>Rejuvenate yourself in an oasis of calm and tranquility</p>
                     <BookNowBtn2>Book Now</BookNowBtn2>
                 </AboutContainer>
-                <ExperienceContainer>
-                {experiences.map((exp, index) => (
-                    <Exp key={index}>
-                        <ExpImage 
-                            src={exp.image} 
-                            alt={exp.title} 
-                            style={{ order: index % 2 === 0 ? 1 : 2 }} 
-                        />
-                        <ExpInfo style={{ order: index % 2 === 0 ? 2 : 1 }}>
-                                <hr />
-                                <h1>{exp.title}</h1>
-                                <p>{exp.description}</p>
-                                <hr />
-                        </ExpInfo>
-                        </Exp>
-                ))}
-                </ExperienceContainer>
+                {loading ? (
+                    <p>Loading experiences...</p> // Show loading message
+                ) : error ? (
+                    <p style={{ color: "red" }}>{error}</p> // Show error message
+                ) : (
+                    <ExperienceContainer>
+                        {experiences.map((exp, index) => (
+                            <Exp key={exp.id}>
+                                <ExpImage 
+                                    src={exp.imageUrl} 
+                                    alt={exp.expName}
+                                    style={{ order: index % 2 === 0 ? 1 : 2 }} 
+                                />
+                                <ExpInfo style={{ order: index % 2 === 0 ? 2 : 1 }}>
+                                    <hr />
+                                    <h1>{exp.expName}</h1>
+                                    <p>{exp.expDetails}</p>
+                                    <hr />
+                                </ExpInfo>
+                            </Exp>
+                        ))}
+                    </ExperienceContainer>
+                )}
             </Content>
         </Container>
     );
 }
 
-
-export default Room;
+export default Experiences;

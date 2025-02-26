@@ -122,7 +122,7 @@ export const FormContainer = styled.div`
   padding-right: 8vh;
   padding-bottom: 8vh;
   padding-top: 8vh;
-  margin-top: 55vh;
+  margin-top: 85vh;
   margin-bottom: 8vh;
   border-radius: 8px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);

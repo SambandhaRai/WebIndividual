@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 
 export const Container = styled.div`
   display: flex;
@@ -107,12 +106,12 @@ export const IconText = styled.div`
 export const Content = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items: center; 
+  justify-content: center; 
   width: 80vw;
   height: calc(100vh - 13vh);
-  padding-top: 20vh;
   overflow-y: auto;
+  padding-top: 0;
 `;
 
 // Form Container
@@ -122,12 +121,12 @@ export const FormContainer = styled.div`
   padding-right: 8vh;
   padding-bottom: 8vh;
   padding-top: 8vh;
-  margin-top: 50vh;
+  margin-top: 25vh;
   margin-bottom: 8vh;
   border-radius: 8px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
-  width: 350px;
+  width: 550px;
   height: auto;
 `;
 
@@ -164,69 +163,6 @@ export const FormGroup = styled.div`
     font-weight: 800;
     margin-bottom: 0.3rem;
     color: #666;
-  }
-`;
-
-// Gender RadioButtons
-export const RadioGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  margin-bottom: 1.5rem;
-  
-  label {
-    font-family: "Times New Roman", Times, serif;
-    font-size: 15px;
-    font-weight: 800;
-    margin-bottom: 0.3rem;
-    color: #666;
-  }
-`;
-
-export const RadioButtonContainer = styled.div`
-  display: flex;
-  gap: 20px; 
-  margin-top: 10px; 
-`;
-
-export const RadioLabel = styled.label`
-  display: flex;
-  align-items: center;
-  font-family: "Times New Roman", Times, serif;
-  font-size: 15px;
-  font-weight: 800;
-  color: #666;
-  cursor: pointer;
-  gap: 5px;
-`;
-
-export const RadioInput = styled.input`
-  appearance: none;
-  width: 18px;
-  height: 18px;
-  border: 2px solid #B77729;
-  border-radius: 50%;
-  display: grid;
-  place-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  &:checked {
-    border-color: black;
-    background-color: #EAE1D8;
-  }
-
-  &:checked::before {
-    content: "";
-    width: 8px;
-    height: 8px;
-    background-color: black;
-    border-radius: 50%;
-    display: block;
-  }
-
-  &:focus {
-    outline: none;
   }
 `;
 
@@ -318,6 +254,26 @@ export const TextArea = styled.textarea`
 `;
 
 export const Select = styled.select`
+  background-color: #EAE1D8;  
+  color: black;
+  padding: 10px;
+  border: 1px solid #B77729;
+  border-radius: 5px;
+  font-size: 1rem;
+  outline: none;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  transition: border 0.3s ease, background 0.3s ease;
+
+  &:focus {
+    background-color: #EAE1D8; 
+    border-color: #B77729;
+  }
+`;
+
+// Search Input Field
+export const SearchInput = styled.input`
   background-color: #EAE1D8;  
   color: black;
   padding: 10px;

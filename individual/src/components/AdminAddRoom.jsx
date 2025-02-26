@@ -26,15 +26,17 @@ import {
     Title,
     Subtitle,
     FormGroup,
-    TextArea
-} from "../styles/addRoom";
+    TextArea,
+} from "../styles/addRoom"; // Assuming you created loading component in styles
 
-const AdminDashboard = () => {
-    const { register, handleSubmit, reset, formState: { errors } } = useForm();
+const AdminAdd = () => {
+    const { register, handleSubmit, reset, formState: { errors }, watch } = useForm();
     const navigate = useNavigate();
     const [roomDetails, setRoomDetails] = useState("");
     const [roomImage, setRoomImage] = useState(null);
     const [loading, setLoading] = useState(false);
+
+    const roomType = watch("roomType");
 
     const handleRoomDetailsChange = (event) => {
         setRoomDetails(event.target.value);
@@ -45,38 +47,51 @@ const AdminDashboard = () => {
     };
 
     const onSubmit = async (data) => {
-        if (!data.roomName || !roomDetails || !roomImage || !data.bedType || !data.bathroom || !data.AdultOccupants || !data.ChildOccupants) {
+        if (!data.roomType || !data.roomName || !roomDetails || !roomImage || !data.bedType || !data.bathroom || !data.AdultOccupants || !data.ChildOccupants || !data.price) {
             toast.error("All fields are required!");
             return;
         }
-    
+
+        if (isNaN(data.price) || data.price <= 0) {
+            toast.error("Price must be a positive number!");
+            return;
+        }
+
         const formData = new FormData();
+
+        formData.append("roomType", data.roomType);
         formData.append("name", data.roomName);
         formData.append("details", roomDetails);
         formData.append("bedType", data.bedType);
         formData.append("bathroom", data.bathroom);
-    
-        // Ensure AdultOccupants and ChildOccupants are treated as strings
         formData.append("adultOccupants", String(data.AdultOccupants));
         formData.append("childOccupants", String(data.ChildOccupants));
-    
+        formData.append("price", data.price);
         formData.append("image", roomImage);
-    
-        setLoading(true); // Set loading to true when submitting
-    
+
+        if (data.roomType === "Suite" && data.area) {
+            formData.append("area", data.area);
+        }
+
+        setLoading(true);
+
         try {
             const res = await createRoom(formData);
             toast.success(res.message || "Room created successfully!");
+
             reset();
+            setRoomDetails("");
             setRoomImage(null);
+            document.getElementById("roomImage").value = "";
+
             setTimeout(() => navigate("/adminadd"), 1000);
         } catch (err) {
             console.error('Create Room Error:', err.response || err);
             toast.error(err.response?.data?.message || "Failed to create room. Please try again.");
         } finally {
-            setLoading(false); // Set loading to false when done
+            setLoading(false);
         }
-    };    
+    };
 
     const handleLogout = () => {
         logout();
@@ -112,6 +127,22 @@ const AdminDashboard = () => {
                             </SideIconText>
                         </SideIcons>
                     </Link>
+                    <Link to="/addexp">
+                        <SideIcons>
+                            <SideIconText>
+                                <PlusSquare size={25} color="black" />
+                                <span> Add Experience</span>
+                            </SideIconText>
+                        </SideIcons>
+                    </Link>
+                    <Link to="/updexp">
+                        <SideIcons>
+                            <SideIconText>
+                                <Edit size={25} color="black" />
+                                <span> Update Experience</span>
+                            </SideIconText>
+                        </SideIcons>
+                    </Link>
                     <SideIcons>
                         <SideIconText onClick={handleLogout}>
                             <LogOut size={25} color="black" />
@@ -142,6 +173,20 @@ const AdminDashboard = () => {
                                     disabled={loading}
                                     required
                                 />
+                            </FormGroup>
+
+                            <FormGroup>
+                                <label htmlFor="roomType">Room Type</label>
+                                <Select
+                                    id="roomType"
+                                    {...register("roomType", { required: "Please select a room type" })}
+                                    disabled={loading}
+                                >
+                                    <option value="">Select Room Type</option>
+                                    <option value="Room">Room</option>
+                                    <option value="Suite">Suite</option>
+                                </Select>
+                                {errors.roomType && <p style={{ color: "red" }}>{errors.roomType.message}</p>}
                             </FormGroup>
 
                             <FormGroup>
@@ -198,6 +243,23 @@ const AdminDashboard = () => {
                                 {errors.bathroom && <p style={{ color: "red" }}>{errors.bathroom.message}</p>}
                             </FormGroup> 
 
+                            {roomType === "Suite" && (
+                                <FormGroup>
+                                    <label htmlFor="area">Area (in m²)</label>
+                                    <Input
+                                        type="number"
+                                        id="area"
+                                        {...register("area", {
+                                            required: "Please enter the area of the suite",
+                                            min: { value: 1, message: "Area must be greater than 0" },
+                                        })}
+                                        placeholder="Enter area in meter square"
+                                        disabled={loading}
+                                    />
+                                    {errors.area && <p style={{ color: "red" }}>{errors.area.message}</p>}
+                                </FormGroup>
+                            )}
+
                             <FormGroup>
                                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <div style={{ width: '48%' }}>
@@ -230,6 +292,22 @@ const AdminDashboard = () => {
                                 </div>
                             </FormGroup>
 
+                            <FormGroup>
+                                <label htmlFor="price">Price (per night in NPR)</label>
+                                <Input
+                                    type="number"
+                                    id="price"
+                                    {...register("price", {
+                                        required: "Please enter the room price",
+                                        min: { value: 1, message: "Price must be greater than 0" }
+                                    })}
+                                    placeholder="Enter price in NPR"
+                                    disabled={loading}
+                                />
+                                {errors.price && <p style={{ color: "red" }}>{errors.price.message}</p>}
+                            </FormGroup>
+
+
                             <Button type="submit" disabled={loading}>Add Room</Button>
                         </Form>
                     </FormContainer>
@@ -250,4 +328,4 @@ const AdminDashboard = () => {
     );
 };
 
-export default AdminDashboard;
+export default AdminAdd;

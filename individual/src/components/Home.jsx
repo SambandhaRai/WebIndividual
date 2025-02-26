@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Bed, ShowerHead, UsersIcon } from "lucide-react";
-import { getCurrentUser, logout, getAllRooms } from "../apis/api"; 
+import { Bed, ShowerHead, UsersIcon, ExpandIcon } from "lucide-react";
+import { getAllRooms, logout } from "../apis/api"; // Import the logout function
 import {
     Container,
     NavContainer, 
@@ -38,21 +38,33 @@ import deer from "../assets/deer.jpeg";
 import golf from "../assets/glf.jpeg";
 import swim from "../assets/swim.jpeg";
 import wed from "../assets/wed.jpeg";
-import ctg from "../assets/ctgRoom.png";
-import prem from "../assets/premRoom.png";
-import club from "../assets/clubRoom.jpeg";
 
 function Home() {
     const [click, setClick] = useState(false);
     const [dropdown, setDropdown] = useState(false);
     const [rooms, setRooms] = useState([]);
+    const [roomTypes, setRoomTypes] = useState([]); 
+    const [isLoggedIn, setIsLoggedIn] = useState(false); 
+    const [userEmail, setUserEmail] = useState(""); 
     const navigate = useNavigate();
 
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem("user")); // Retrieve user data from localStorage
+        if (user) {
+            setIsLoggedIn(true); 
+            setUserEmail(user.email); 
+        }
+    }, []);
+
+    // Fetch rooms from the database
     useEffect(() => {
         const fetchRooms = async () => {
             try {
                 const response = await getAllRooms();
-                setRooms(response.data); // Assuming the response has a `data` field containing the rooms
+                const sortedRooms = response.data.sort((a, b) => a.id - b.id);
+                setRooms(sortedRooms);
+                const types = sortedRooms.map(room => room.name);
+                setRoomTypes(types);
             } catch (error) {
                 console.error("Error fetching rooms:", error);
             }
@@ -72,6 +84,14 @@ function Home() {
         navigate("/book");
     };
 
+    // Handle logout
+    const handleLogout = () => {
+        logout(); 
+        setIsLoggedIn(false); 
+        setUserEmail(""); 
+        navigate("/home"); 
+    };
+
     return (
         <Container>
             <BookNowBtn2 onClick={bookClick}>BOOK NOW</BookNowBtn2>
@@ -86,9 +106,11 @@ function Home() {
                         <NavItem onMouseEnter={toggleDropdown} onMouseLeave={toggleDropdown}>
                             <Link to="/rooms">ROOMS & SUITES</Link>
                             <DropdownMenu $dropdown={dropdown}>
-                            <DropdownItem><Link to="/rooms/cottage">Cottage Room</Link></DropdownItem>
-                            <DropdownItem><Link to="/rooms/premium">Premium Room</Link></DropdownItem>
-                            <DropdownItem><Link to="/rooms/club">Club Room</Link></DropdownItem>
+                                {roomTypes.map((roomType, index) => (
+                                    <DropdownItem key={index}>
+                                        <Link to={`/rooms/${roomType.toLowerCase()}`}>{roomType}</Link>
+                                    </DropdownItem>
+                                ))}
                             </DropdownMenu>
                         </NavItem>
                         <NavItem><Link to="/experience">EXPERIENCES</Link></NavItem>
@@ -98,9 +120,18 @@ function Home() {
                             ) : (
                                 <StyledMenuIcon size={24} />// Render MenuIcon when not clicked
                             )}
-                            <MenuIconDropdown $dropdown={click}>
+                            <MenuIconDropdown $dropdown={click} $isLoggedIn={isLoggedIn}>
+                                {isLoggedIn ? (
+                                    <>
+                                        <DropdownItem>{userEmail}</DropdownItem>
+                                        <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
+                                    </>
+                                ) : (
+                                    <>
                                         <DropdownItem><Link to="/login">Login</Link></DropdownItem>
                                         <DropdownItem><Link to="/signup">Sign Up</Link></DropdownItem>
+                                    </>
+                                )}
                             </MenuIconDropdown>
                         </NavItem>
                     </NavList>
@@ -145,6 +176,12 @@ function Home() {
                                             <Bed size={20} color="#B77729" />
                                             <span> {room.bedType}</span>
                                         </IconText>
+                                        {room.roomType === "Suite" && (
+                                            <IconText>
+                                                <ExpandIcon size={20} color="#B77729" />
+                                                <span> {room.area} m²</span>
+                                            </IconText>
+                                        )}
                                         <IconText>
                                             <ShowerHead size={20} color="#B77729" />
                                             <span> {room.bathroom}</span>

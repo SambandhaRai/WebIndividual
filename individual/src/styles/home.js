@@ -111,10 +111,11 @@ export const MenuIconDropdown = styled.div`
   background-color: #EEDDB8;
   color: black;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  width: 15vh; /* Or any width that suits your design */
+  margin-top: 5px;
+  width: ${(props) => (props.$isLoggedIn ? "auto" : "15vh")}; 
   top: 100%;
-  right: 0;  /* This ensures it doesn't stretch to the right side */
-  left: 0; /* Align it to the left of the parent container */
+  right: 0;  
+  left: ${(props) => (props.$isLoggedIn ? "auto" : "0")}; 
   padding: 10px 0;
   z-index: 1;
   display: ${(props) => (props.$dropdown ? "block" : "none")};
@@ -355,11 +356,12 @@ export const RoomInfoText = styled.div`
 `;
 
 export const Icons = styled.div`
-  display: flex;
-  justify-content: left;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 10px 20px; 
+  justify-content: center;
   margin-left: 5vh;
-  gap: 20px;
-  flex-wrap: wrap;
+  width: fit-content; 
 `;
 
 export const IconText = styled.div`

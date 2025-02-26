@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Bed, Expand, ExpandIcon, ShowerHead, UsersIcon } from "lucide-react";
 import {
@@ -27,22 +27,54 @@ import {
     BookNowBtn,
     BookNowBtn2
 } from "../styles/rooms";
-import ctg from "../assets/ctgRoom.png";
-import prem from "../assets/premRoom.png";
-import club from "../assets/clubRoom.jpeg";
-import premS from "../assets/prem.jpeg";
-import lux from "../assets/lux.png";
+import { getAllRooms, logout } from "../apis/api";
 
 function Room() {
     const [click, setClick] = useState(false);
     const [dropdown, setDropdown] = useState(false);
+    const [rooms, setRooms] = useState([]);
+    const [roomTypes, setRoomTypes] = useState([]);
+    const [isLoggedIn, setIsLoggedIn] = useState(false); 
+    const [userEmail, setUserEmail] = useState(""); 
     const navigate = useNavigate();  
 
     const handleClick = () => setClick(!click);
     const toggleDropdown = () => setDropdown(prev => !prev);
 
     const bookClick = () => {
-        navigate("/book");  // Navigate to /rooms when the button is clicked
+        navigate("/book");
+    };
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem("user")); // Retrieve user data from localStorage
+        if (user) {
+            setIsLoggedIn(true); 
+            setUserEmail(user.email); 
+        }
+    }, []);
+
+    useEffect(() => {
+        const fetchRooms = async () => {
+            try {
+                const response = await getAllRooms();
+                const sortedRooms = response.data.sort((a, b) => a.id - b.id);
+                setRooms(sortedRooms);
+                const types = sortedRooms.map(room => room.name);
+                setRoomTypes(types);
+            } catch (error) {
+                console.error("Error fetching rooms:", error);
+            }
+        };
+
+        fetchRooms();
+    }, []);
+
+    // Handle logout
+    const handleLogout = () => {
+        logout(); 
+        setIsLoggedIn(false); 
+        setUserEmail(""); 
+        navigate("/home"); 
     };
 
     return (
@@ -55,25 +87,36 @@ function Room() {
                         <NavItem onMouseEnter={toggleDropdown} onMouseLeave={toggleDropdown}>
                             <Link to="/rooms"
                             onClick={(e) => {
-                                e.preventDefault(); // Prevent navigation
-                                window.location.reload(); // Reload page
+                                e.preventDefault();
+                                window.location.reload();
                             }}>ROOMS & SUITES</Link>
                             <DropdownMenu $dropdown={dropdown}>
-                            <DropdownItem><Link to="/rooms/cottage">Cottage Room</Link></DropdownItem>
-                            <DropdownItem><Link to="/rooms/premium">Premium Room</Link></DropdownItem>
-                            <DropdownItem><Link to="/rooms/club">Club Room</Link></DropdownItem>
+                            {roomTypes.map((roomType, index) => (
+                                    <DropdownItem key={index}>
+                                        <Link to={`/rooms/${roomType.toLowerCase()}`}>{roomType}</Link>
+                                    </DropdownItem>
+                                ))}
                             </DropdownMenu>
                         </NavItem>
                         <NavItem><Link to="/experience">EXPERIENCES</Link></NavItem>
                         <NavItem><Link to="/reviews">REVIEWS</Link></NavItem>
-                        <NavItem onClick={handleClick} onAbort={handleClick}>{click ? (
-                                <StyledXIcon size={24} />  // Render X (cross) when clicked
+                        <NavItem onClick={handleClick}>{click ? (
+                                <StyledXIcon size={24} />
                             ) : (
-                                <StyledMenuIcon size={24} />// Render MenuIcon when not clicked
+                                <StyledMenuIcon size={24} />
                             )}
-                            <MenuIconDropdown $dropdown={click}>
-                                <DropdownItem><Link to="/login">Login</Link></DropdownItem>
-                                <DropdownItem><Link to="/signup">Sign Up</Link></DropdownItem>
+                            <MenuIconDropdown $dropdown={click} $isLoggedIn={isLoggedIn}>
+                                {isLoggedIn ? (
+                                    <>
+                                        <DropdownItem>{userEmail}</DropdownItem>
+                                        <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
+                                    </>
+                                ) : (
+                                    <>
+                                        <DropdownItem><Link to="/login">Login</Link></DropdownItem>
+                                        <DropdownItem><Link to="/signup">Sign Up</Link></DropdownItem>
+                                    </>
+                                )}
                             </MenuIconDropdown>
                         </NavItem>
                     </NavList>
@@ -88,7 +131,6 @@ function Room() {
                         &nbsp;
                         <span>SUITES</span>
                     </h1>
-                    {/* <hr /> */}
                     <p>Indulge in luxury with our beautifully designed rooms and suites, offering the perfect blend of comfort and elegance for every guest</p>
                     <BookNowBtn2 onClick={bookClick}>Book Now</BookNowBtn2>
                 </AboutContainer>
@@ -101,153 +143,41 @@ function Room() {
                         <p>Choose your perfect stay in our elegantly appointed rooms, where luxury meets comfort. Each room offers a serene retreat with stunning views, ensuring a memorable and restful experience.</p>
                     </RoomText>
                     <Rooms>
-                        <RoomCard>
-                            <RoomImage src={ctg} alt="Cottage Room" />
-                            <RoomInfo>
-                                <h2>Cottage Room</h2>
-                                <RoomInfoText>
-                                    <p>Unwind and find your inner peace as you relax in our fully air-conditioned Cottage Rooms.</p>
-                                </RoomInfoText>
-                                <hr />
-                                    <Icons>
-                                        <IconText>
-                                            <Bed size={20} color="#B77729" />
-                                            <span> Double/Twin Beds</span>
-                                        </IconText>
-                                        <IconText>
-                                            <ShowerHead size={20} color="#B77729" />
-                                            <span> Not Included</span>
-                                        </IconText>
-                                        <IconText>
-                                            <UsersIcon size={20} color="#B77729" />
-                                            <span> 2 Adults + 1 Child</span>
-                                        </IconText>
-                                    </Icons>
-                                <hr />
-                            </RoomInfo>
-                            <LearnMoreBtn>Learn More</LearnMoreBtn>
-                            <BookNowBtn onClick={bookClick}>Book Now</BookNowBtn>
-                        </RoomCard>
-
-                        <RoomCard>
-                            <RoomImage src={prem} alt="Premium Room" />
-                            <RoomInfo>
-                                <h2>Premium Room</h2>
-                                <RoomInfoText>
-                                    <p>Immerse yourself in timeless elegance and comfort within our Premium Rooms, where heritage-inspired architecture meets modern luxury.</p>
-                                </RoomInfoText>
-                                <hr />
-                                    <Icons>
-                                        <IconText>
-                                            <Bed size={20} color="#B77729" />
-                                            <span> Double/Twin Beds</span>
-                                        </IconText>
-                                        <IconText>
-                                            <ShowerHead size={20} color="#B77729" />
-                                            <span> 1 Bathroom</span>
-                                        </IconText>
-                                        <IconText>
-                                            <UsersIcon size={20} color="#B77729" />
-                                            <span> 2 Adults + 1 Child</span>
-                                        </IconText>
-                                    </Icons>
-                                <hr />
-                            </RoomInfo>
-                            <LearnMoreBtn>Learn More</LearnMoreBtn>
-                            <BookNowBtn onClick={bookClick}>Book Now</BookNowBtn>
-                        </RoomCard>
-
-                        <RoomCard>
-                            <RoomImage src={club} alt="Club Room" />
-                            <RoomInfo>
-                                <h2>Club Room</h2>
-                                <RoomInfoText>
-                                    <p>Experience the perfect blend of tradition and sophistication in our Club Rooms, offering warm, inviting interiors designed for a serene and memorable stay.</p>
-                                </RoomInfoText>
-                                    <hr />
+                    {rooms.map((room) => (
+                                <RoomCard key={room.id}>
+                                    <RoomImage src={room.imageUrl} alt={room.name} />
+                                    <RoomInfo>
+                                        <h2>{room.name}</h2>
+                                        <RoomInfoText>
+                                            <p>{room.details}</p>
+                                        </RoomInfoText>
+                                        <hr />
                                         <Icons>
                                             <IconText>
                                                 <Bed size={20} color="#B77729" />
-                                                <span> Double/Twin Beds</span>
+                                                <span> {room.bedType}</span>
                                             </IconText>
+                                            {room.roomType === "Suite" && (
+                                                <IconText>
+                                                    <ExpandIcon size={20} color="#B77729" />
+                                                    <span> {room.area} m²</span>
+                                                </IconText>
+                                            )}
                                             <IconText>
                                                 <ShowerHead size={20} color="#B77729" />
-                                                <span> 1 Bathroom</span>
+                                                <span> {room.bathroom}</span>
                                             </IconText>
                                             <IconText>
                                                 <UsersIcon size={20} color="#B77729" />
-                                                <span> 2 Adults + 1 Child</span>
+                                                <span> {room.adultOccupants} + {room.childOccupants}</span>
                                             </IconText>
                                         </Icons>
-                                    <hr />
-                            </RoomInfo>
-                            <LearnMoreBtn>Learn More</LearnMoreBtn>
-                            <BookNowBtn onClick={bookClick}>Book Now</BookNowBtn>
-                        </RoomCard>
-
-                        <RoomCard>
-                            <RoomImage src={premS} alt="Premier Suite" />
-                            <RoomInfo>
-                                <h2>Premier Suite</h2>
-                                <RoomInfoText>
-                                    <p>Combining new decor with a classic style, our premier suite offers patrons with utmost luxury accommodation.</p>
-                                </RoomInfoText>
-                                    <hr />
-                                        <Icons>
-                                            <IconText>
-                                                <Bed size={20} color="#B77729" />
-                                                <span> Double Beds</span>
-                                            </IconText>
-                                            <IconText>
-                                                <ExpandIcon size={20} color="#B77729" />
-                                                <span> 42 m²</span>
-                                            </IconText>
-                                            <IconText>
-                                                <ShowerHead size={20} color="#B77729" />
-                                                <span> 1 Bathroom</span>
-                                            </IconText>
-                                            <IconText>
-                                                <UsersIcon size={20} color="#B77729" />
-                                                <span> 2 Adults + 1 Child</span>
-                                            </IconText>
-                                        </Icons>
-                                    <hr />
-                            </RoomInfo>
-                            <LearnMoreBtn>Learn More</LearnMoreBtn>
-                            <BookNowBtn onClick={bookClick}>Book Now</BookNowBtn>
-                        </RoomCard>
-
-                        <RoomCard>
-                            <RoomImage src={lux} alt="Deluxe Suite" />
-                            <RoomInfo>
-                                <h2>Deluxe Suite</h2>
-                                <RoomInfoText>
-                                    <p>Set in a duplex suite with an attic, the Deluxe Suite derives inspiration from classical nepali architecture</p>
-                                </RoomInfoText>
-                                    <hr />
-                                        <Icons>
-                                            <IconText>
-                                                <Bed size={20} color="#B77729" />
-                                                <span> Double Beds</span>
-                                            </IconText>
-                                            <IconText>
-                                                <ExpandIcon size={20} color="#B77729" />
-                                                <span> 92 m²</span>
-                                            </IconText>
-                                            <IconText>
-                                                <ShowerHead size={20} color="#B77729" />
-                                                <span> 1 Bathroom</span>
-                                            </IconText>
-                                            <IconText>
-                                                <UsersIcon size={20} color="#B77729" />
-                                                <span> 2 Adults + 1 Child</span>
-                                            </IconText>
-                                        </Icons>
-                                    <hr />
-                            </RoomInfo>
-                            <LearnMoreBtn>Learn More</LearnMoreBtn>
-                            <BookNowBtn onClick={bookClick}>Book Now</BookNowBtn>
-                        </RoomCard>
+                                        <hr />
+                                    </RoomInfo>
+                                    <LearnMoreBtn>Learn More</LearnMoreBtn>
+                                    <BookNowBtn onClick={bookClick}>Book Now</BookNowBtn>
+                                </RoomCard>
+                            ))}
                     </Rooms>
                 </RoomContainer>
             </Content>

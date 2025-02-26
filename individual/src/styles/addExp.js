@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 
 export const Container = styled.div`
   display: flex;
@@ -37,7 +36,6 @@ export const SidebarContent = styled.div`
   font-size: 1rem;
   color: black;
   text-align: left;
-
 `;
 
 export const SideIcons = styled.div`
@@ -122,12 +120,12 @@ export const FormContainer = styled.div`
   padding-right: 8vh;
   padding-bottom: 8vh;
   padding-top: 8vh;
-  margin-top: 50vh;
+  margin-top: 0vh;
   margin-bottom: 8vh;
   border-radius: 8px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
-  width: 350px;
+  width: 450px;
   height: auto;
 `;
 
@@ -167,69 +165,7 @@ export const FormGroup = styled.div`
   }
 `;
 
-// Gender RadioButtons
-export const RadioGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  margin-bottom: 1.5rem;
-  
-  label {
-    font-family: "Times New Roman", Times, serif;
-    font-size: 15px;
-    font-weight: 800;
-    margin-bottom: 0.3rem;
-    color: #666;
-  }
-`;
-
-export const RadioButtonContainer = styled.div`
-  display: flex;
-  gap: 20px; 
-  margin-top: 10px; 
-`;
-
-export const RadioLabel = styled.label`
-  display: flex;
-  align-items: center;
-  font-family: "Times New Roman", Times, serif;
-  font-size: 15px;
-  font-weight: 800;
-  color: #666;
-  cursor: pointer;
-  gap: 5px;
-`;
-
-export const RadioInput = styled.input`
-  appearance: none;
-  width: 18px;
-  height: 18px;
-  border: 2px solid #B77729;
-  border-radius: 50%;
-  display: grid;
-  place-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  &:checked {
-    border-color: black;
-    background-color: #EAE1D8;
-  }
-
-  &:checked::before {
-    content: "";
-    width: 8px;
-    height: 8px;
-    background-color: black;
-    border-radius: 50%;
-    display: block;
-  }
-
-  &:focus {
-    outline: none;
-  }
-`;
-
+// Input Fields and Text Area
 export const Input = styled.input`
   background-color: #EAE1D8;  
   color: black;
@@ -260,6 +196,29 @@ export const Input = styled.input`
   }
 `;
 
+export const TextArea = styled.textarea`
+  width: 100%; 
+  max-width: 100%; 
+  padding: 10px;
+  font-size: 16px;
+  font-family: Arial, Helvetica, sans-serif;
+  border-radius: 4px;
+  border: 1px solid #B77729; 
+  background-color: #EAE1D8; 
+  color: black;
+  resize: none;  
+  overflow-y: auto;  
+  height: auto;
+  box-sizing: border-box; 
+  
+  transition: height 0.2s ease, background-color 0.3s ease, border-color 0.3s ease;
+
+  &:focus {
+    background-color: #EAE1D8;  
+    border-color: #B77729; 
+  }
+`;
+
 export const Button = styled.button`
   background-color: #B77729;
   color: white;
@@ -283,40 +242,6 @@ export const Button = styled.button`
   }
 `;
 
-export const TextArea = styled.textarea`
-  width: 100%; 
-  max-width: 100%; 
-  padding: 10px;
-  font-size: 16px;
-  font-family: Arial, Helvetica, sans-serif;
-  border-radius: 4px;
-  border: 1px solid #B77729; 
-  background-color: #EAE1D8; 
-  color: black;
-  resize: none;  
-  overflow-y: auto;  
-  height: auto;
-  box-sizing: border-box; 
-  
-  transition: height 0.2s ease, background-color 0.3s ease, border-color 0.3s ease;
-
-  &:focus {
-    background-color: #EAE1D8;  
-    border-color: #B77729; 
-  }
-
-  /* Fix autofill styles */
-  &:-webkit-autofill,
-  &:-webkit-autofill:hover, 
-  &:-webkit-autofill:focus, 
-  &:-webkit-autofill:active {
-    background-color: #EAE1D8;
-    color: black;
-    -webkit-text-fill-color: black;
-    -webkit-box-shadow: 0 0 0px 1000px #EAE1D8 inset;
-  }
-`;
-
 export const Select = styled.select`
   background-color: #EAE1D8;  
   color: black;
@@ -335,3 +260,67 @@ export const Select = styled.select`
     border-color: #B77729;
   }
 `;
+
+// Add experience specific styles
+export const FormGroupImage = styled(FormGroup)`
+  margin-bottom: 2rem;
+`;
+
+export const ImageInput = styled(Input)`
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #B77729;
+  background-color: #EAE1D8;
+`;
+
+export const LoadingContainer = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+`;
+
+export const LoadingDots = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+export const LoadingDot = styled.div`
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #B77729;
+  animation: bounce 1s infinite ease-in-out;
+
+  &:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  &:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+
+  @keyframes bounce {
+    0%, 100% {
+      transform: scale(0.8);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+  }
+`;
+
+export const LoadingText = styled.div`
+  font-size: 18px;
+  color: white;
+  margin-top: 1vh;
+`;
+
