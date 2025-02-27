@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { MenuIcon, PlusSquare, LogOut, Edit } from "lucide-react";
+import { MenuIcon, PlusSquare, LogOut, Edit, ViewIcon } from "lucide-react";
 import { toast } from "react-toastify";
 import { createExperience, logout } from "../apis/api";
 import { Link } from "react-router-dom";
@@ -121,6 +121,14 @@ const AdminAddExp = () => {
                             <SideIconText>
                                 <Edit size={25} color="black" />
                                 <span> Update Experience</span>
+                            </SideIconText>
+                        </SideIcons>
+                    </Link>
+                    <Link to="/viewbooking">
+                        <SideIcons>
+                            <SideIconText>
+                                <ViewIcon size={25} color="black" />
+                                <span> View Booking</span>
                             </SideIconText>
                         </SideIcons>
                     </Link>

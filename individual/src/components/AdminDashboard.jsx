@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { MenuIcon, PlusSquare, LogOut, Edit, Trash, ExpandIcon } from "lucide-react";
+import { MenuIcon, PlusSquare, LogOut, Edit, Trash, ExpandIcon, ViewIcon } from "lucide-react";
 import { toast } from "react-toastify";
 import { getAllRooms, deleteRoom, logout, getAllExperiences, deleteExperience } from "../apis/api";
 import { Bed, ShowerHead, UsersIcon } from "lucide-react";
@@ -172,6 +172,14 @@ const Dashboard = () => {
                             <SideIconText>
                                 <Edit size={25} color="black" />
                                 <span> Update Experience</span>
+                            </SideIconText>
+                        </SideIcons>
+                    </Link>
+                    <Link to="/viewbooking">
+                        <SideIcons>
+                            <SideIconText>
+                                <ViewIcon size={25} color="black" />
+                                <span> View Booking</span>
                             </SideIconText>
                         </SideIcons>
                     </Link>

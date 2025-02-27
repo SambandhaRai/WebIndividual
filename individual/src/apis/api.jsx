@@ -48,7 +48,7 @@ export const loginApi = async (data) => {
 export const registerApi = async (data) => {
     try {
         const response = await axios.post('http://localhost:4000/api/users/create', data);
-    return response;
+        return response;
     } catch (error) {
         console.error(" Registration API Error:", error.response?.data || error.message);
         throw error.response?.data || error;
@@ -70,7 +70,7 @@ export const getCurrentUser = async () => {
 export const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    toast.success("Successfully logged out!");  
+    toast.success("Successfully logged out!");
     console.log("User logged out, token removed.");
     window.location.href = "/login"; // Redirect to login page
 };
@@ -80,7 +80,7 @@ export const logout = () => {
 
 // ----------------- USER APIs ---------------------
 
-// Get All Users (Admin or Authenticated Users)
+// Get all users (Admin or Authenticated Users)
 export const getAllUsers = async () => {
     try {
         const response = await Api.get("/users", getAuthConfig());
@@ -320,10 +320,21 @@ export const updateBookingApi = async (bookingId, updateData) => {
 // Cancel a booking
 export const cancelBookingApi = async (bookingId) => {
     try {
-        const response = await Api.delete(`/bookings/${bookingId}`, getAuthConfig());
+        const response = await Api.put(`/bookings/${bookingId}/cancel`, {}, getAuthConfig());
         return response.data;
     } catch (error) {
         console.error("Cancel Booking API Error:", error.response?.data || error.message);
+        throw error.response?.data || error;
+    }
+};
+
+// Delete a booking
+export const deleteBookingApi = async (bookingId) => {
+    try {
+        const response = await Api.delete(`/bookings/${bookingId}`, getAuthConfig());
+        return response.data;
+    } catch (error) {
+        console.error("Delete Booking API Error:", error.response?.data || error.message);
         throw error.response?.data || error;
     }
 };

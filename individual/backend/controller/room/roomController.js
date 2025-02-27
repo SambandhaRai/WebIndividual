@@ -1,4 +1,4 @@
-import { Room, Booking } from "../../model/index.js"; 
+import { Room, Booking } from "../../model/associations.js";
 import { Op } from "sequelize"; 
 import { sequelize } from "../../database/db.js";
 import cloudinary from "../../uploads/cloudinaryConfig.js";

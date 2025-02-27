@@ -48,4 +48,6 @@ export const Room = sequelize.define("room", {
     type: DataTypes.FLOAT,
     allowNull: false,
   }
+},{
+  timestamps: true,
 });

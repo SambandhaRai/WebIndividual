@@ -28,6 +28,8 @@ const AdminAddExp = React.lazy(() => import("./components/AdminAddExp"));
 
 const AdminUpdateExp = React.lazy(() => import("./components/AdminUpdateExp"));
 
+const AdminViewBooking = React.lazy(() => import("./components/AdminViewBooking"));
+
 
 function App() {
 
@@ -50,6 +52,7 @@ function App() {
           <Route path="/addexp" element={<AdminAddExp />} /> 
           <Route path="/updexp" element={<AdminUpdateExp />} /> 
           <Route path="/updexp/:id" element={<AdminUpdateExp />} /> 
+          <Route path="/viewbooking" element={<AdminViewBooking />} /> 
         </Routes>
       </Suspense>
     </Router>

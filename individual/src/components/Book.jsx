@@ -162,7 +162,7 @@ function Book() {
     
         // Prepare booking data
         const bookingData = {
-            userId: localStorage.getItem('userId'), 
+            userId: localStorage.getItem('userId'), // Ensure userId is set in localStorage
             roomId: roomId, // Use the selected room ID
             checkInDate: dateRange[0].startDate.toISOString(),
             checkOutDate: dateRange[0].endDate.toISOString(),
