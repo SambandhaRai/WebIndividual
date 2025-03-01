@@ -144,6 +144,13 @@ function Book() {
     };
 
     const handleBooking = async (roomId) => {
+
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+            toast.error("Please log in first to book a room.");
+            return;
+        }
+        
         // Validate inputs
         if (!selectedRoom) {
             toast.error("Please select a room type.");

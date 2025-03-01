@@ -23,6 +23,9 @@ export const createBooking = async (req, res) => {
         const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));  // Number of days
         const totalPrice = room.price * daysDiff * roomQuantity; // Total price
 
+        // Ensure pricePerNight is set
+        const pricePerNight = room.price;
+
         // Create the booking
         const booking = await Booking.create({
             userId,
@@ -35,7 +38,7 @@ export const createBooking = async (req, res) => {
             roomQuantity,
             totalPrice, // Store calculated total price
             roomName: room.name, // Store room name directly in booking
-            pricePerNight: room.price, // Store price per night in the booking
+            pricePerNight, // Store price per night in the booking
         });
 
         res.status(201).json({ message: "Booking created successfully", booking });

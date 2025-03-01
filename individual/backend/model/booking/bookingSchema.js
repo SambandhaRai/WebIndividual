@@ -3,7 +3,7 @@ import { sequelize } from "../../database/db.js";
 import { User } from "../user/userSchema.js";  // Import User model
 import { Room } from "../room/roomSchema.js";  // Import Room model
 
-export const Booking = sequelize.define("Booking", {
+export const Booking = sequelize.define("bookings", {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
