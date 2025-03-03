@@ -84,6 +84,14 @@ function Home() {
         navigate("/book");
     };
 
+    const learnClick = () => {
+        navigate("/rooms")
+    }
+
+    const contactClick = () => {
+        navigate("/contact")
+    }
+
     // Handle logout
     const handleLogout = () => {
         logout(); 
@@ -108,13 +116,13 @@ function Home() {
                             <DropdownMenu $dropdown={dropdown}>
                                 {roomTypes.map((roomType, index) => (
                                     <DropdownItem key={index}>
-                                        <Link to={`/rooms/${roomType.toLowerCase()}`}>{roomType}</Link>
+                                        <Link to={`/rooms`}>{roomType}</Link>
                                     </DropdownItem>
                                 ))}
                             </DropdownMenu>
                         </NavItem>
                         <NavItem><Link to="/experience">EXPERIENCES</Link></NavItem>
-                        <NavItem><Link to="/reviews">REVIEWS</Link></NavItem>
+                        <NavItem><Link to="/contact">CONTACT US</Link></NavItem>
                         <NavItem onClick={handleClick} onAbort={handleClick}>{click ? (
                                 <StyledXIcon size={24} />  // Render X (cross) when clicked
                             ) : (
@@ -146,7 +154,7 @@ function Home() {
                         Once a retreat for royalty, this haven invites you to wander beneath towering trees, where the whispers of history meet the soothing sounds of nature.</p>
                     <p>Wake up to the sight of misty hills, spot wildlife in their natural habitat, and let the crisp mountain air rejuvenate your spirit. 
                         Whether you seek adventure, relaxation, or a touch of indulgence, every moment here is a celebration of tranquility and luxury. Your escape begins now.</p>
-                    <AboutBtn>About Us</AboutBtn>
+                    <AboutBtn onClick={contactClick}>Contact Us</AboutBtn>
                 </AboutContainer>
                 <ImageContainer>
                     <Images>
@@ -193,7 +201,7 @@ function Home() {
                                     </Icons>
                                     <hr />
                                 </RoomInfo>
-                                <LearnMoreBtn>Learn More</LearnMoreBtn>
+                                <LearnMoreBtn onClick={learnClick}>Learn More</LearnMoreBtn>
                                 <BookNowBtn onClick={bookClick}>Book Now</BookNowBtn>
                             </RoomCard>
                         ))}

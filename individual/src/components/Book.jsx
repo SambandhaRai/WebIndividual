@@ -145,9 +145,16 @@ function Book() {
 
     const handleBooking = async (roomId) => {
 
-        const userId = localStorage.getItem('userId');
+        // Show confirmation dialog
+        const confirmBooking = window.confirm("Are you sure you want to book this room?");
+        if (!confirmBooking) {
+            return; // Exit if the user cancels the booking
+        }
+
+        const userId = localStorage.getItem('user');
         if (!userId) {
             toast.error("Please log in first to book a room.");
+            navigate("/login")
             return;
         }
         

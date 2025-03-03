@@ -23,7 +23,6 @@ import {
     RoomInfoText,
     Icons,
     IconText,
-    LearnMoreBtn,
     BookNowBtn,
     BookNowBtn2
 } from "../styles/rooms";
@@ -93,13 +92,13 @@ function Room() {
                             <DropdownMenu $dropdown={dropdown}>
                             {roomTypes.map((roomType, index) => (
                                     <DropdownItem key={index}>
-                                        <Link to={`/rooms/${roomType.toLowerCase()}`}>{roomType}</Link>
+                                        <Link to={`/rooms`}>{roomType}</Link>
                                     </DropdownItem>
                                 ))}
                             </DropdownMenu>
                         </NavItem>
                         <NavItem><Link to="/experience">EXPERIENCES</Link></NavItem>
-                        <NavItem><Link to="/reviews">REVIEWS</Link></NavItem>
+                        <NavItem><Link to="/contact">CONTACT US</Link></NavItem>
                         <NavItem onClick={handleClick}>{click ? (
                                 <StyledXIcon size={24} />
                             ) : (
@@ -174,7 +173,6 @@ function Room() {
                                         </Icons>
                                         <hr />
                                     </RoomInfo>
-                                    <LearnMoreBtn>Learn More</LearnMoreBtn>
                                     <BookNowBtn onClick={bookClick}>Book Now</BookNowBtn>
                                 </RoomCard>
                             ))}

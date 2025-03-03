@@ -107,7 +107,7 @@ function Experiences() {
                                 {/* Dynamically render rooms from API */}
                                 {rooms.map((room) => (
                                     <DropdownItem key={room.id}>
-                                        <Link to={`/rooms/${room.name.toLowerCase()}`}>{room.name}</Link>
+                                        <Link to={`/rooms`}>{room.name}</Link>
                                     </DropdownItem>
                                 ))}
                             </DropdownMenu>
@@ -117,7 +117,7 @@ function Experiences() {
                             e.preventDefault(); 
                             window.location.reload(); 
                         }}>EXPERIENCES</Link></NavItem>
-                        <NavItem><Link to="/reviews">REVIEWS</Link></NavItem>
+                        <NavItem><Link to="/contact">CONTACT US</Link></NavItem>
                         <NavItem onClick={handleClick} onAbort={handleClick}>{click ? (
                                 <StyledXIcon size={24} />  // Render X (cross) when clicked
                             ) : (

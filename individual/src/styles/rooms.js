@@ -398,36 +398,10 @@ export const IconText = styled.div`
   color: #B77729;
 `;
 
-export const LearnMoreBtn = styled.button`
-  padding: 2vh;
-  width: 90%;
-  margin-bottom: 10px;
-  background-color: white;
-  color: #B77729;
-  border: 2px solid #B77729;
-  padding: 10px 20px;
-  font-family: "Times New Roman", Times, serif;
-  font-size: 1rem;
-  border-radius: 0px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background-color: #B77729;
-    color: white;
-    border-color: #B77729;
-  }
-
-  &:focus {
-    outline: none;
-    border-color: #B77729;
-  }
-`;
-
 export const BookNowBtn = styled.button`
   padding: 2vh;
   width: 90%;
-  margin-bottom: 4vh;
+  margin-bottom: 5vh;
   background-color: #B77729;
   color: white;
   border: 2px solid #B77729;
