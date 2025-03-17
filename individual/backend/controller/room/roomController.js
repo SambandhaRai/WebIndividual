@@ -14,7 +14,6 @@ export const getAll = async (req, res) => {
   }
 };
 
-// Create a new room
 export const create = async (req, res) => {
   const transaction = await sequelize.transaction();
   try {
