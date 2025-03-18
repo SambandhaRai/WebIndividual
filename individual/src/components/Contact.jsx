@@ -85,17 +85,16 @@ function Contact() {
                             </DropdownMenu>
                         </NavItem>
                         <NavItem>
-                            <Link
-                                to="/experience"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    window.location.reload();
-                                }}
-                            >
+                            <Link to="/experience">
                                 EXPERIENCES
                             </Link>
                         </NavItem>
-                        <NavItem><Link to="/contact">CONTACT US</Link></NavItem>
+                        <NavItem>
+                            <Link to="/contact"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                window.location.reload();
+                            }}>CONTACT US</Link></NavItem>
                         <NavItem onClick={handleClick} onAbort={handleClick}>
                             {click ? (
                                 <StyledXIcon size={24} />  // Render X (cross) when clicked
